@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CloudLook</string>
+    <string name="jump">跳过</string>
 </resources>
