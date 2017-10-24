@@ -3,4 +3,10 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorTheme">#ffce3d3a</color>
+    <color name="colorWhite">#ffffffff</color>
+    <!--页面背景的颜色-->
+    <color name="colorPageBg">#f2f4f5</color>
+    <!--透明色-->
+    <color name="colorTransparent">#00000000</color>
 </resources>
