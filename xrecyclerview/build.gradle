@@ -1,15 +1,17 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
+
     defaultConfig {
-        applicationId "com.example.lisiyan.cloudlook"
         minSdkVersion 23
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
     }
     buildTypes {
         release {
@@ -18,9 +20,9 @@ android {
         }
     }
 
-    // dataBinding 加入
-    dataBinding {
-        enabled = true
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
     }
 }
 
@@ -30,16 +32,6 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:appcompat-v7:26.+'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
-    //me
-    compile 'jp.wasabeef:glide-transformations:3.0.1'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    // Because RxAndroid releases are few and far between, it is recommended you also
-    // explicitly depend on RxJava's latest version for bug fixes and new features.
-    compile 'io.reactivex.rxjava2:rxjava:2.1.5'
-    compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
-    compile 'com.android.support:design:26.0.0-alpha1'
-    compile 'com.jaeger.statusbarutil:library:1.4.0'
-    compile project(':xrecyclerview')
+    compile 'com.android.support:recyclerview-v7:26.0.0-alpha1'
 }

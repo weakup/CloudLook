@@ -59,7 +59,7 @@
                 <ImageView
                     android:id="@+id/iv_title_gank"
                     android:layout_width="55dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:src="@drawable/titlebar_disco"/>
@@ -93,8 +93,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/colorWhite"
-                android:descendantFocusability="blocksDescendants"/>
+                android:descendantFocusability="blocksDescendants">
                 <!--blocksDescendants viewgroup会覆盖子类控件而直接获得焦点-->
+            </android.support.v4.view.ViewPager>
 
 
             <android.support.design.widget.FloatingActionButton
