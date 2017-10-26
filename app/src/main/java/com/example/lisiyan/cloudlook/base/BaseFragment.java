@@ -80,6 +80,7 @@ public abstract  class BaseFragment<SV extends ViewDataBinding> extends Fragment
                     public void accept(Object o) throws Exception {
 
                         showLoading();
+                        onRefresh();
                     }
                 });
 

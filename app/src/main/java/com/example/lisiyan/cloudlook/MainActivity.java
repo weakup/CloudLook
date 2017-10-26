@@ -25,6 +25,7 @@ import com.example.lisiyan.cloudlook.view.MyFragmentPagerAdapter;
 import com.jaeger.library.StatusBarUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,ViewPager.OnPageChangeListener {
@@ -83,7 +84,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     NavHeaderMainBinding mNavHeaderBinding;
 
     private void initDrawerLayout(){
-
         navView.inflateHeaderView(R.layout.nav_header_main);
         View headerView = navView.getHeaderView(0);
         mNavHeaderBinding = DataBindingUtil.bind(headerView);
