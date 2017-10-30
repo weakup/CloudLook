@@ -27,7 +27,8 @@ public class GankFragment extends BaseFragment<FragmentGankBinding>{
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-       showLoading();
+        showLoading();
+        initFragmentList();
         MyFragmentPagerAdapter myFragmentPagerAdapter = new MyFragmentPagerAdapter(getChildFragmentManager(),mFragments,mTitleList);
         bindingView.vpGank.setAdapter(myFragmentPagerAdapter);
         // 左右预加载页面的个数
@@ -62,7 +63,7 @@ public class GankFragment extends BaseFragment<FragmentGankBinding>{
         mTitleList.add("福利");
         mTitleList.add("干货订制");
         mTitleList.add("大安卓");
-        //
+
 
     }
 

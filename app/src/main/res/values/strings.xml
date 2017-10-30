@@ -4,4 +4,5 @@
     <string name="username">笡听</string>
     <string name="error_load">加载失败,点击重试</string>
     <string name="loading">努力加载中~</string>
+    <string name="actionbar_search">搜索</string>
 </resources>

@@ -3,6 +3,15 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
+    <data>
+
+        <variable
+            name="listener"
+            type="com.example.lisiyan.cloudlook.MainActivity">
+        </variable>
+
+    </data>
+
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
