@@ -27,7 +27,7 @@ import io.reactivex.internal.subscriptions.ArrayCompositeSubscription;
  * Created by lisiyan on 2017/10/25.
  */
 
-public abstract  class BaseFragment<SV extends ViewDataBinding> extends Fragment {
+public abstract class BaseFragment<SV extends ViewDataBinding> extends Fragment {
 
     // 布局view
     protected SV bindingView;
@@ -44,9 +44,6 @@ public abstract  class BaseFragment<SV extends ViewDataBinding> extends Fragment
 
     private CompositeDisposable mCompositeDisposable;
 
-
-
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -56,7 +53,7 @@ public abstract  class BaseFragment<SV extends ViewDataBinding> extends Fragment
         bindingView.getRoot().setLayoutParams(params);
         mContainer = view.findViewById(R.id.container);
         mContainer.addView(bindingView.getRoot());
-        return mContainer;
+        return view;
     }
 
     @Override

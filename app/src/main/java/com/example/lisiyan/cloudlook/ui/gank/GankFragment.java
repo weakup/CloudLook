@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import com.example.lisiyan.cloudlook.R;
 import com.example.lisiyan.cloudlook.base.BaseFragment;
 import com.example.lisiyan.cloudlook.databinding.FragmentGankBinding;
+import com.example.lisiyan.cloudlook.ui.gank.child.EverydayFragment;
 import com.example.lisiyan.cloudlook.view.MyFragmentPagerAdapter;
 
 import java.util.ArrayList;
@@ -43,19 +44,10 @@ public class GankFragment extends BaseFragment<FragmentGankBinding>{
 
 
     @Override
-    protected void showContentView() {
-        super.showContentView();
-    }
-
-    @Override
     public int setContent() {
         return R.layout.fragment_gank;
     }
 
-    @Override
-    protected void showError() {
-        super.showError();
-    }
 
     private void initFragmentList(){
 
@@ -63,7 +55,7 @@ public class GankFragment extends BaseFragment<FragmentGankBinding>{
         mTitleList.add("福利");
         mTitleList.add("干货订制");
         mTitleList.add("大安卓");
-
+        mFragments.add(new EverydayFragment());
 
     }
 

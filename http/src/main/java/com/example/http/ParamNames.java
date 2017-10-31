@@ -1,4 +1,4 @@
-package com.example.http.utils;
+package com.example.http;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

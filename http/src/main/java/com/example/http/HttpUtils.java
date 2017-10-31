@@ -3,7 +3,6 @@ package com.example.http;
 import android.content.Context;
 
 import com.example.http.utils.CheckNetwork;
-import com.example.http.utils.ParamNames;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.FieldNamingStrategy;
 import com.google.gson.Gson;
@@ -11,8 +10,6 @@ import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -44,6 +41,8 @@ public class HttpUtils {
     private Context context;
     private Object gankHttps;
     private boolean debug;
+
+    private final static String API_GANKIO = "https://gank.io/api/";
 
     public static HttpUtils getInstance(){
 
