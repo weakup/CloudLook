@@ -24,6 +24,9 @@
 
         </com.youth.banner.Banner>
 
+        <include
+            android:id="@+id/include_everyday"
+            layout="@layout/home_middle_layout"/>
 
 
     </LinearLayout>

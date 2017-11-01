@@ -1,7 +1,9 @@
 package com.example.lisiyan.cloudlook.ui.gank.child;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
@@ -10,6 +12,7 @@ import android.view.animation.RotateAnimation;
 import com.example.lisiyan.cloudlook.R;
 import com.example.lisiyan.cloudlook.base.BaseFragment;
 import com.example.lisiyan.cloudlook.databinding.FragmentEverydayBinding;
+import com.example.lisiyan.cloudlook.databinding.HeaderItemEverydayBinding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +24,7 @@ import java.util.List;
 public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
 
     private RotateAnimation animation;
+    private HeaderItemEverydayBinding mHeaderBinding;
 
     @Override
     public int setContent() {
@@ -42,7 +46,16 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
         bindingView.ivLoading.setAnimation(animation);
         animation.startNow();
 
+        mHeaderBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),R.layout.header_item_everyday,null,false);
 
+
+
+    }
+
+    private void initRecycleView(){
+
+
+        bindingView.xrvEveryday.
 
 
     }
