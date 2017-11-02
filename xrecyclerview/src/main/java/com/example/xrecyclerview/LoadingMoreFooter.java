@@ -5,6 +5,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,6 +32,7 @@ public class LoadingMoreFooter extends LinearLayout {
 
     public LoadingMoreFooter(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        initView(context);
     }
 
     public LoadingMoreFooter(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -59,9 +61,33 @@ public class LoadingMoreFooter extends LinearLayout {
                 if (!mAnimationDrawable.isRunning()){
                     mAnimationDrawable.start();
                 }
+            mIvProgress.setVisibility(VISIBLE);
+            mTextView.setText(getContext().getText(R.string.listview_loading));
+            this.setVisibility(VISIBLE);
+            break;
 
-                mIvProgress.setVisibility(VISIBLE);
+            case STATE_COMPLETE:
+                if (mAnimationDrawable.isRunning()){
+                    mAnimationDrawable.stop();
+                }
+                mTextView.setText(getContext().getText(R.string.listview_loading));
+                this.setVisibility(View.GONE);
+                break;
+
+            case STATE_NOMORE:
+                if (mAnimationDrawable.isRunning()){
+                    mAnimationDrawable.stop();
+                }
+                mTextView.setText(getContext().getText(R.string.nomore_loading));
+                mIvProgress.setVisibility(GONE);
+                this.setVisibility(VISIBLE);
+                break;
         }
 
+    }
+
+    public void reSet(){
+
+        this.setVisibility(GONE);
     }
 }

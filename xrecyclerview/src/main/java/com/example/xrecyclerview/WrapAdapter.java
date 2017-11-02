@@ -35,7 +35,7 @@ public class WrapAdapter extends RecyclerView.Adapter {
 
     //GridLayout 头部适配  getSpanSize  如果是头部和尾部 占满。
     //如果是其他的位置占一个格子
-    //onAttachedToRecyclerView  Called by RecyclerView when it starts observing this Adapter.
+    //
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
@@ -53,7 +53,7 @@ public class WrapAdapter extends RecyclerView.Adapter {
         }
     }
 
-    //瀑布流布局 同上
+    //瀑布流布局 需要LayoutParams 的setFullSpan 方法来设置占位宽度 在这里处理
 
     @Override
     public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
@@ -93,7 +93,14 @@ public class WrapAdapter extends RecyclerView.Adapter {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
+        if (viewType == TYPE_REFRESH_HEADER){
+            return new SimpleViewHolder(mHeaderViews.get(0));
+        }else if (viewType == TYPE_HEADER){
+            return new SimpleViewHolder(mHeaderViews.get(headerPosition++));
+        }else if (viewType == TYPE_FOOTER){
+            return new SimpleViewHolder(mFootViews.get(0));
+        }
+        return mAdapter.onCreateViewHolder(parent,viewType);
     }
 
     @Override

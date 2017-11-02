@@ -55,7 +55,7 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
     private void initRecycleView(){
 
 
-        bindingView.xrvEveryday.
+
 
 
     }
