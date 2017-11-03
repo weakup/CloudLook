@@ -2,7 +2,11 @@ package com.example.lisiyan.cloudlook.ui.gank.child;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -16,6 +20,11 @@ import com.example.lisiyan.cloudlook.databinding.HeaderItemEverydayBinding;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by lisiyan on 2017/10/30.
@@ -25,6 +34,9 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
 
     private RotateAnimation animation;
     private HeaderItemEverydayBinding mHeaderBinding;
+    private View mHeaderView;
+    private View mFooterView;
+
 
     @Override
     public int setContent() {
@@ -48,32 +60,60 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
 
         mHeaderBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),R.layout.header_item_everyday,null,false);
 
+        initRecycleView();
 
 
     }
 
     private void initRecycleView(){
 
+        bindingView.xrvEveryday.setPullRefreshEnabled(false);
+        bindingView.xrvEveryday.setLoadingMoreEnabled(false);
+
+        if (mHeaderView == null){
+
+            mHeaderView = mHeaderBinding.getRoot();
+            bindingView.xrvEveryday.addHeaderView(mHeaderView);
+        }
 
 
+        bindingView.xrvEveryday.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        //设置嵌套滑动
+        bindingView.xrvEveryday.setNestedScrollingEnabled(false);
+        //如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
+        bindingView.xrvEveryday.setHasFixedSize(false);
+        bindingView.xrvEveryday.setItemAnimator(new DefaultItemAnimator());
 
 
     }
 
-//    /**
-//     * 获取当天日期
-//     */
-//    private List<String> getTodayTime() {
-//        String data = TimeUtil.getData();
-//        String[] split = data.split("-");
-//        String year = split[0];
-//        String month = split[1];
-//        String day = split[2];
-//        List<String> list = new ArrayList<>();
-//        list.add(year);
-//        list.add(month);
-//        list.add(day);
-//        return list;
-//    }
+    private void showRotaLoading(boolean isLoading) {
+        if (isLoading) {
+            bindingView.llLoading.setVisibility(View.VISIBLE);
+            bindingView.xrvEveryday.setVisibility(View.GONE);
+            animation.startNow();
+        } else {
+            bindingView.llLoading.setVisibility(View.GONE);
+            bindingView.xrvEveryday.setVisibility(View.VISIBLE);
+            animation.cancel();
+        }
+    }
+
+    private void setAdapter(){
+
+        Observable.timer(3000, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        showRotaLoading(false);
+                    }
+                });
+
+
+    }
+
+
 
 }

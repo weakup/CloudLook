@@ -25,9 +25,10 @@ public class XRecyclerView extends RecyclerView{
     private SparseArray<View> mHeaderViews = new SparseArray<View>();
     private SparseArray<View> mFootViews = new SparseArray<View>();
     private boolean pullRefreshEnabled = true;
+    private boolean loadingMoreEnabled = true;
     private YunRefreshHeader mRefreshHeader;
     private boolean isLoadingData;
-    private boolean loadingMoreEnabled = true;
+
     // 是否是额外添加FooterView
     private boolean isOther = false;
     public boolean isnomore;
@@ -223,7 +224,6 @@ public class XRecyclerView extends RecyclerView{
         }
 
         switch (e.getAction()){
-
             case MotionEvent.ACTION_DOWN:
                 mLastY = e.getRawY();
                 break;
