@@ -2,6 +2,7 @@ package com.example.lisiyan.cloudlook.http;
 
 import com.example.http.HttpUtils;
 import com.example.lisiyan.cloudlook.bean.GankIoDataBean;
+import com.example.lisiyan.cloudlook.bean.GankIoDayBean;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -15,8 +16,7 @@ public interface HttpClient {
 
     class Builder{
 
-        public static HttpClient getDouBanService(){
-
+        public static HttpClient getGankIOServer() {
             return HttpUtils.getInstance().getGankIOServer(HttpClient.class);
         }
 
@@ -29,7 +29,15 @@ public interface HttpClient {
      * 第几页：数字，大于0
      * eg: http://gank.io/api/data/Android/10/1
      */
-    @GET("data/{type}/{req_number}/{page}")
-    Observable<GankIoDataBean> mGankIoBean(@Path("type") String id,@Path("req_number") int req_number,@Path("page") int page);
+    @GET("data/{type}/{pre_page}/{page}")
+    Observable<GankIoDataBean> getGankIoData(@Path("type") String id, @Path("page") int page, @Path("pre_page") int pre_page);
+
+    /**
+     * 每日数据： http://gank.io/api/day/年/月/日
+     * eg:http://gank.io/api/day/2015/08/06
+     */
+    @GET("day/{year}/{month}/{day}")
+    Observable<GankIoDayBean> getGankIoDay(@Path("year") String year, @Path("month") String month, @Path("day") String day);
+
 
 }

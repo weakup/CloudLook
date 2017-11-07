@@ -96,12 +96,12 @@ public abstract class BaseFragment<SV extends ViewDataBinding> extends Fragment 
             mIsVisible = true;
             onVisible();
         }else {
-
             mIsVisible = false;
             onInvisible();
         }
     }
 
+    // 努力加载中~
     protected void showLoading(){
         if (mLlProgressBar.getVisibility() != View.VISIBLE){
             mLlProgressBar.setVisibility(View.VISIBLE);

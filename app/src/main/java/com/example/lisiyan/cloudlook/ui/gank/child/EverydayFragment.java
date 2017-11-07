@@ -14,16 +14,24 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 
 import com.example.lisiyan.cloudlook.R;
+import com.example.lisiyan.cloudlook.adapter.EverydayAdapter;
 import com.example.lisiyan.cloudlook.base.BaseFragment;
+import com.example.lisiyan.cloudlook.bean.AndroidBean;
 import com.example.lisiyan.cloudlook.databinding.FragmentEverydayBinding;
 import com.example.lisiyan.cloudlook.databinding.HeaderItemEverydayBinding;
+import com.example.lisiyan.cloudlook.http.RequestImpl;
+import com.example.lisiyan.cloudlook.model.EverydayModel;
+
+import org.reactivestreams.Subscription;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
 /**
@@ -34,8 +42,12 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
 
     private RotateAnimation animation;
     private HeaderItemEverydayBinding mHeaderBinding;
+    private ArrayList<List<AndroidBean>> mLists;
+    private EverydayModel mEverydayModel;
     private View mHeaderView;
     private View mFooterView;
+    private EverydayAdapter mEverydayAdapter;
+    private boolean mIsPrepared = false;
 
 
     @Override
@@ -57,10 +69,16 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
         animation.setRepeatCount(10);
         bindingView.ivLoading.setAnimation(animation);
         animation.startNow();
-
+        mEverydayModel = new EverydayModel();
         mHeaderBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),R.layout.header_item_everyday,null,false);
 
         initRecycleView();
+        mIsPrepared = true;
+        /**
+         * 因为启动时先走loadData()再走onActivityCreated，
+         * 所以此处要额外调用load(),不然最初不会加载内容
+         */
+        loadData();
 
 
     }
@@ -88,6 +106,60 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
 
     }
 
+
+    @Override
+    protected void loadData() {
+
+        if (!mIsVisible || !mIsPrepared) {
+            return;
+        }
+
+//        showRotaLoading(true);
+        showContentData();
+
+    }
+
+    private void showContentData() {
+
+        mEverydayModel.showRecyclerViewData(new RequestImpl() {
+            @Override
+            public void loadSuccess(Object object) {
+
+                if (mLists != null){
+                    mLists.clear();
+                }
+
+                mLists = (ArrayList<List<AndroidBean>>) object;
+
+                if (mLists.size() > 0 && mLists.get(0).size() > 0){
+
+                    setAdapter(mLists);
+                }else {
+
+                }
+
+            }
+
+            @Override
+            public void loadFailed() {
+
+                if (mLists !=null && mLists.size() > 0){
+
+                    return;
+                }
+
+                showError();
+
+            }
+
+            @Override
+            public void addSubscription(Disposable d) {
+
+                EverydayFragment.this.addDisposable(d);
+            }
+        });
+    }
+
     private void showRotaLoading(boolean isLoading) {
         if (isLoading) {
             bindingView.llLoading.setVisibility(View.VISIBLE);
@@ -100,17 +172,18 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
         }
     }
 
-    private void setAdapter(){
+    private void setAdapter(List<List<AndroidBean>> lists){
 
-        Observable.timer(3000, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Long>() {
-                    @Override
-                    public void accept(Long aLong) throws Exception {
-                        showRotaLoading(false);
-                    }
-                });
+      showRotaLoading(false);
+      if (mEverydayAdapter == null){
+          mEverydayAdapter = new EverydayAdapter(getContext());
+      }else {
+          mEverydayAdapter.clear();
+      }
 
+      mEverydayAdapter.addAll(lists);
+      bindingView.xrvEveryday.setAdapter(mEverydayAdapter);
+      mEverydayAdapter.notifyDataSetChanged();
 
     }
 

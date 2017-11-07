@@ -11,6 +11,8 @@ import com.example.lisiyan.cloudlook.base.baseadapter.BaseRecycleViewHolder;
 import com.example.lisiyan.cloudlook.base.baseadapter.BaseRecyclerViewAdapter;
 import com.example.lisiyan.cloudlook.bean.AndroidBean;
 import com.example.lisiyan.cloudlook.databinding.ItemEverydayTitleBinding;
+import com.example.lisiyan.cloudlook.http.rx.RxBus;
+import com.example.lisiyan.cloudlook.http.rx.RxCodeConstants;
 
 import java.util.List;
 
@@ -119,6 +121,7 @@ public class EverydayAdapter extends BaseRecyclerViewAdapter<List<AndroidBean>> 
                 @Override
                 public void onClick(View view) {
 
+                    RxBus.getDefault().post(RxCodeConstants.JUMP_TYPE,finalIndex);
                 }
             });
 
