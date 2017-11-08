@@ -89,6 +89,14 @@ public abstract class BaseFragment<SV extends ViewDataBinding> extends Fragment 
         return (T)getView().findViewById(id);
     }
 
+    /**
+     *
+     * @param isVisibleToUser
+     * viewpager监听切换tab事件，tab切换一次，执行一次setUserVisibleHint()方法
+       setUserVisibleHint() 在fragment所有生命周期之前，无论viewpager是在activity哪个生命周期里初始化。
+       activity生命周期 和 fragment生命周期 时序并不是按序来的，也就是说fragment的oncreate方法时序并不一定在activity的oncreate方法之后。
+     */
+
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);

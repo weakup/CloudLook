@@ -10,11 +10,15 @@ import android.net.NetworkInfo;
 
 public class CheckNetwork {
 
+    /**
+     * 判断网络是否连通
+     */
     public static boolean isNetworkConnected(Context context){
 
         if (context != null){
-
-            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            @SuppressWarnings("static-access")
+            ConnectivityManager cm = (ConnectivityManager)
+                    context.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo info = cm.getActiveNetworkInfo();
 
             return info !=null && info.isConnected();

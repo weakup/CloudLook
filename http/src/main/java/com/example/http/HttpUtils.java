@@ -56,10 +56,9 @@ public class HttpUtils {
         return instance;
     }
 
-    public void init(Context context ,boolean debug){
+    public void init(Context context){
 
         this.context = context;
-        this.debug = debug;
 
     }
 
@@ -157,25 +156,22 @@ public class HttpUtils {
 
     }
 
-    class HttpHeadInterceptor implements Interceptor{
-
+    class HttpHeadInterceptor implements Interceptor {
         @Override
         public Response intercept(Chain chain) throws IOException {
             Request request = chain.request();
             Request.Builder builder = request.newBuilder();
-            builder.addHeader("Accept","application/json;versions=1");
-            if (CheckNetwork.isNetworkConnected(context)){
-
+            builder.addHeader("Accept", "application/json;versions=1");
+            if (true) {
                 int maxAge = 60;
                 builder.addHeader("Cache-Control", "public, max-age=" + maxAge);
-            }else {
+            } else {
                 int maxStale = 60 * 60 * 24 * 28;
                 builder.addHeader("Cache-Control", "public, only-if-cached, max-stale=" + maxStale);
             }
 
             return chain.proceed(builder.build());
         }
-
     }
 
 
@@ -186,7 +182,7 @@ public class HttpUtils {
             synchronized (HttpUtils.class){
 
                 if (gankHttps == null){
-                    gankHttps =getBuilder("");
+                    gankHttps =getBuilder(API_GANKIO).build().create(a);
                 }
             }
         }

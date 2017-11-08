@@ -5,14 +5,24 @@ import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.lisiyan.cloudlook.R;
 import com.example.lisiyan.cloudlook.base.baseadapter.BaseRecycleViewHolder;
 import com.example.lisiyan.cloudlook.base.baseadapter.BaseRecyclerViewAdapter;
 import com.example.lisiyan.cloudlook.bean.AndroidBean;
+import com.example.lisiyan.cloudlook.databinding.ItemEverydayOneBinding;
+import com.example.lisiyan.cloudlook.databinding.ItemEverydayThreeBinding;
 import com.example.lisiyan.cloudlook.databinding.ItemEverydayTitleBinding;
+import com.example.lisiyan.cloudlook.databinding.ItemEverydayTwoBinding;
 import com.example.lisiyan.cloudlook.http.rx.RxBus;
 import com.example.lisiyan.cloudlook.http.rx.RxCodeConstants;
+import com.jakewharton.rxbinding2.view.RxView;
 
 import java.util.List;
 
@@ -35,13 +45,13 @@ public class EverydayAdapter extends BaseRecyclerViewAdapter<List<AndroidBean>> 
 
     @Override
     public int getItemViewType(int position) {
-        if (!TextUtils.isEmpty(getData().get(position).get(0).getType_title())){
+        if (!TextUtils.isEmpty(getData().get(position).get(0).getType_title())) {
             return TYPE_TITLE;
-        }else if (getData().get(position).size()==1){
+        } else if (getData().get(position).size() == 1) {
             return TYPE_ONE;
-        }else if (getData().get(position).size() == 2) {
+        } else if (getData().get(position).size() == 2) {
             return TYPE_TWO;
-        }else if (getData().get(position).size() == 3) {
+        } else if (getData().get(position).size() == 3) {
             return TYPE_THREE;
         }
         return super.getItemViewType(position);
@@ -55,12 +65,14 @@ public class EverydayAdapter extends BaseRecyclerViewAdapter<List<AndroidBean>> 
 
             case TYPE_TITLE:
                 return new TitleHoder(parent,R.layout.item_everyday_title);
+
             case TYPE_ONE:
-                return null;
+                return new OneHolder(parent,R.layout.item_everyday_one);
+
             case TYPE_TWO:
-                return null;
+                return new TwoHolder(parent,R.layout.item_everyday_two);
             default:
-                return null;
+                return new ThreeHolder(parent,R.layout.item_everyday_three);
 
         }
     }
@@ -128,7 +140,78 @@ public class EverydayAdapter extends BaseRecyclerViewAdapter<List<AndroidBean>> 
         }
 
 
+    }
 
+    private class OneHolder extends BaseRecycleViewHolder<List<AndroidBean>,ItemEverydayOneBinding>{
+
+
+        public OneHolder(ViewGroup viewGroup, int layoutId) {
+            super(viewGroup, layoutId);
+        }
+
+        @Override
+        public void onBindViewHolder(List<AndroidBean> object, int posotion) {
+
+            if ("福利".equals(object.get(0).getType())){
+                binding.tvOnePhotoTitle.setVisibility(View.GONE);
+                binding.ivOnePhoto.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+                RequestOptions requestOptions = new RequestOptions();
+                requestOptions.error(R.drawable.img_two_bi_one)
+                        .placeholder(R.drawable.img_two_bi_one);
+
+                Glide.with(binding.ivOnePhoto.getContext())
+                        .load(object.get(0).getUrl())
+                        .apply(requestOptions)
+                        .transition(new DrawableTransitionOptions().crossFade(2000))
+                        .into(binding.ivOnePhoto);
+            }else {
+
+                binding.tvOnePhotoTitle.setVisibility(View.VISIBLE);
+                setDes(object,0,binding.tvOnePhotoTitle);
+
+            }
+
+        }
+    }
+
+    private class TwoHolder extends BaseRecycleViewHolder<List<AndroidBean>,ItemEverydayTwoBinding>{
+
+
+        public TwoHolder(ViewGroup viewGroup, int layoutId) {
+            super(viewGroup, layoutId);
+        }
+
+        @Override
+        public void onBindViewHolder(List<AndroidBean> object, int posotion) {
+            setDes(object, 0, binding.tvTwoOneOneTitle);
+            setDes(object, 1, binding.tvTwoOneTwoTitle);
+        }
+    }
+
+    private class ThreeHolder extends BaseRecycleViewHolder<List<AndroidBean>,ItemEverydayThreeBinding>{
+
+
+        public ThreeHolder(ViewGroup viewGroup, int layoutId) {
+            super(viewGroup, layoutId);
+        }
+
+        @Override
+        public void onBindViewHolder(List<AndroidBean> object, int posotion) {
+
+            setDes(object, 0, binding.tvThreeOneOneTitle);
+//            setDes(object, 1, binding.tvThreeOneTwoTitle);
+//            setDes(object, 2, binding.tvThreeOneThreeTitle);
+        }
+    }
+
+    private void setOnClick(final LinearLayout linearLayout , final AndroidBean bean){
+
+    }
+
+    private void setDes(List<AndroidBean> object , int position , TextView textView){
+
+        textView.setText(object.get(position).getDesc());
 
     }
 

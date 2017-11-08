@@ -97,7 +97,7 @@ public class EverydayModel {
             @Override
             public void onError(Throwable e) {
 
-                listener.loadFailed();;
+                listener.loadFailed();
             }
 
             @Override
@@ -106,7 +106,7 @@ public class EverydayModel {
             }
         };
 
-        HttpClient.Builder.getGankIOServer().getGankIoDay("2017","10","1")
+        HttpClient.Builder.getGankIOServer().getGankIoDay("2017","11","6")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap(function)
@@ -116,7 +116,7 @@ public class EverydayModel {
     }
 
     /**
-     *
+     *这个bean 第一个位置 只有title 这个属性 有值 其余  desc type url 有值
      * @param lists  用来存储
      * @param arrayList 这个list是复合的 他们Json数据格式一样 统一叫做AndroidBean（包含ios 福利啥的~）
      * @param typeTitle
