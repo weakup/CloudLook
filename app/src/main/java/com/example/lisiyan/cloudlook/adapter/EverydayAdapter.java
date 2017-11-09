@@ -22,6 +22,7 @@ import com.example.lisiyan.cloudlook.databinding.ItemEverydayTitleBinding;
 import com.example.lisiyan.cloudlook.databinding.ItemEverydayTwoBinding;
 import com.example.lisiyan.cloudlook.http.rx.RxBus;
 import com.example.lisiyan.cloudlook.http.rx.RxCodeConstants;
+import com.example.lisiyan.cloudlook.utils.ImgLoadUtil;
 import com.jakewharton.rxbinding2.view.RxView;
 
 import java.util.List;
@@ -169,6 +170,7 @@ public class EverydayAdapter extends BaseRecyclerViewAdapter<List<AndroidBean>> 
 
                 binding.tvOnePhotoTitle.setVisibility(View.VISIBLE);
                 setDes(object,0,binding.tvOnePhotoTitle);
+                displayRandomImg(1,0,binding.ivOnePhoto,object);
 
             }
 
@@ -184,6 +186,8 @@ public class EverydayAdapter extends BaseRecyclerViewAdapter<List<AndroidBean>> 
 
         @Override
         public void onBindViewHolder(List<AndroidBean> object, int posotion) {
+            displayRandomImg(2, 0, binding.ivTwoOneOne, object);
+            displayRandomImg(2, 1, binding.ivTwoOneTwo, object);
             setDes(object, 0, binding.tvTwoOneOneTitle);
             setDes(object, 1, binding.tvTwoOneTwoTitle);
         }
@@ -198,10 +202,12 @@ public class EverydayAdapter extends BaseRecyclerViewAdapter<List<AndroidBean>> 
 
         @Override
         public void onBindViewHolder(List<AndroidBean> object, int posotion) {
-
+            displayRandomImg(3, 0, binding.ivThreeOneOne, object);
+            displayRandomImg(3, 1, binding.ivThreeOneTwo, object);
+            displayRandomImg(3, 2, binding.ivThreeOneThree, object);
             setDes(object, 0, binding.tvThreeOneOneTitle);
-//            setDes(object, 1, binding.tvThreeOneTwoTitle);
-//            setDes(object, 2, binding.tvThreeOneThreeTitle);
+            setDes(object, 1, binding.tvThreeOneTwoTitle);
+            setDes(object, 2, binding.tvThreeOneThreeTitle);
         }
     }
 
@@ -213,6 +219,18 @@ public class EverydayAdapter extends BaseRecyclerViewAdapter<List<AndroidBean>> 
 
         textView.setText(object.get(position).getDesc());
 
+    }
+
+    /**
+     *
+     * @param imgNumber 图片的尺寸
+     * @param position  holder position get(0)
+     * @param imageView
+     * @param object  bean
+     */
+    private void displayRandomImg(int imgNumber, int position, ImageView imageView, List<AndroidBean> object) {
+//        DebugUtil.error("-----Image_url: "+object.get(position).getImage_url());
+        ImgLoadUtil.displayRandom(imgNumber, object.get(position).getImage_url(), imageView);
     }
 
 

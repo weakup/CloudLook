@@ -1,5 +1,6 @@
 package com.example.lisiyan.cloudlook.model;
 
+import com.example.lisiyan.cloudlook.app.ConstantsImageUrl;
 import com.example.lisiyan.cloudlook.bean.AndroidBean;
 import com.example.lisiyan.cloudlook.bean.GankIoDayBean;
 import com.example.lisiyan.cloudlook.http.HttpClient;
@@ -9,6 +10,7 @@ import org.reactivestreams.Subscription;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -165,6 +167,16 @@ public class EverydayModel {
         // 跳转链接
         androidBean.setUrl(arrayList.get(i).getUrl());
 
+        if (i < 3) {
+            androidBean.setImage_url(ConstantsImageUrl.HOME_SIX_URLS[getRandom(3)]);//三小图
+        } else if (androidSize == 4) {
+            androidBean.setImage_url(ConstantsImageUrl.HOME_ONE_URLS[getRandom(1)]);//一图
+        } else if (androidSize == 5) {
+            androidBean.setImage_url(ConstantsImageUrl.HOME_TWO_URLS[getRandom(2)]);//两图
+        } else if (androidSize >= 6) {
+            androidBean.setImage_url(ConstantsImageUrl.HOME_SIX_URLS[getRandom(3)]);//三小图
+        }
+
         return androidBean;
 
     }
@@ -182,8 +194,37 @@ public class EverydayModel {
 //            DebugUtil.error("---androidSize:  " + androidSize);
             // 随机图的url
 
+            if (androidSize == 1) {
+                androidBean.setImage_url(ConstantsImageUrl.HOME_ONE_URLS[getRandom(1)]);//一图
+            } else if (androidSize == 2) {
+                androidBean.setImage_url(ConstantsImageUrl.HOME_TWO_URLS[getRandom(2)]);//两图
+            } else if (androidSize == 3) {
+                androidBean.setImage_url(ConstantsImageUrl.HOME_SIX_URLS[getRandom(3)]);//三图
+            }
+
             tempList.add(androidBean);
         }
         return tempList;
+    }
+
+    private int getRandom(int type) {
+
+        String saveWhere = null;
+        int urlLength = 0;
+        if (type == 1) {
+            saveWhere = HOME_ONE;
+            urlLength = ConstantsImageUrl.HOME_ONE_URLS.length;
+        } else if (type == 2) {
+            saveWhere = HOME_TWO;
+            urlLength = ConstantsImageUrl.HOME_TWO_URLS.length;
+        } else if (type == 3) {
+            saveWhere = HOME_SIX;
+            urlLength = ConstantsImageUrl.HOME_SIX_URLS.length;
+        }
+
+        Random random = new Random();
+
+        int randomInt = random.nextInt(urlLength);
+        return randomInt;
     }
 }

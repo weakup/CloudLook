@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navView.inflateHeaderView(R.layout.nav_header_main);
         View headerView = navView.getHeaderView(0);
         mNavHeaderBinding = DataBindingUtil.bind(headerView);
-        ImgLoadUtil.displayCirlce(mNavHeaderBinding.ivAvatar,null);
+        ImgLoadUtil.getInstance().displayCirlce(mNavHeaderBinding.ivAvatar,null);
     }
 
 
