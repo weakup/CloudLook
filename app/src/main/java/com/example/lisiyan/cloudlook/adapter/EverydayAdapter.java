@@ -1,7 +1,9 @@
 package com.example.lisiyan.cloudlook.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +25,13 @@ import com.example.lisiyan.cloudlook.databinding.ItemEverydayTwoBinding;
 import com.example.lisiyan.cloudlook.http.rx.RxBus;
 import com.example.lisiyan.cloudlook.http.rx.RxCodeConstants;
 import com.example.lisiyan.cloudlook.utils.ImgLoadUtil;
+import com.example.lisiyan.cloudlook.view.webview.WebViewActivity;
 import com.jakewharton.rxbinding2.view.RxView;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by lisiyan on 2017/11/3.
@@ -174,6 +180,8 @@ public class EverydayAdapter extends BaseRecyclerViewAdapter<List<AndroidBean>> 
 
             }
 
+            setOnClick(binding.llOnePhoto, object.get(0));
+
         }
     }
 
@@ -190,6 +198,8 @@ public class EverydayAdapter extends BaseRecyclerViewAdapter<List<AndroidBean>> 
             displayRandomImg(2, 1, binding.ivTwoOneTwo, object);
             setDes(object, 0, binding.tvTwoOneOneTitle);
             setDes(object, 1, binding.tvTwoOneTwoTitle);
+            setOnClick(binding.llTwoOneOne, object.get(0));
+            setOnClick(binding.llTwoOneTwo, object.get(1));
         }
     }
 
@@ -205,6 +215,9 @@ public class EverydayAdapter extends BaseRecyclerViewAdapter<List<AndroidBean>> 
             displayRandomImg(3, 0, binding.ivThreeOneOne, object);
             displayRandomImg(3, 1, binding.ivThreeOneTwo, object);
             displayRandomImg(3, 2, binding.ivThreeOneThree, object);
+            setOnClick(binding.llThreeOneOne, object.get(0));
+            setOnClick(binding.llThreeOneTwo, object.get(1));
+            setOnClick(binding.llThreeOneThree, object.get(2));
             setDes(object, 0, binding.tvThreeOneOneTitle);
             setDes(object, 1, binding.tvThreeOneTwoTitle);
             setDes(object, 2, binding.tvThreeOneThreeTitle);
@@ -212,6 +225,38 @@ public class EverydayAdapter extends BaseRecyclerViewAdapter<List<AndroidBean>> 
     }
 
     private void setOnClick(final LinearLayout linearLayout , final AndroidBean bean){
+
+        RxView.clicks(linearLayout)
+                .throttleFirst(1000, TimeUnit.MILLISECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+
+                        WebViewActivity.loadUrl(linearLayout.getContext(),bean.getUrl(),"加载中...");
+                    }
+                });
+
+        linearLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                View view = View.inflate(v.getContext(), R.layout.title_douban_top, null);
+                TextView titleTop = (TextView) view.findViewById(R.id.title_top);
+                titleTop.setTextSize(14);
+                String title = TextUtils.isEmpty(bean.getType()) ? bean.getDesc() : bean.getType() + "：  " + bean.getDesc();
+                titleTop.setText(title);
+                builder.setCustomTitle(view);
+                builder.setPositiveButton("查看详情", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        WebViewActivity.loadUrl(linearLayout.getContext(), bean.getUrl(), "加载中...");
+                    }
+                });
+                builder.show();
+                return false;
+            }
+        });
+
 
     }
 
