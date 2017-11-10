@@ -62,4 +62,15 @@ public class MyWebViewClient extends WebViewClient {
 
         super.onPageFinished(view,url);
     }
+
+    // 视频全屏播放按返回页面被放大的问题
+    @Override
+    public void onScaleChanged(WebView view, float oldScale, float newScale) {
+        super.onScaleChanged(view, oldScale, newScale);
+        if (newScale - oldScale > 7) {
+            view.setInitialScale((int) (oldScale / newScale * 100)); //异常放大，缩回去。
+        }
+    }
+
+
 }

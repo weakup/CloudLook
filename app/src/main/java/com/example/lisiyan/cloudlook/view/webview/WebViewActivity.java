@@ -2,6 +2,7 @@ package com.example.lisiyan.cloudlook.view.webview;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -19,6 +20,7 @@ import android.widget.ProgressBar;
 import com.example.lisiyan.cloudlook.R;
 import com.example.lisiyan.cloudlook.utils.CommonUtils;
 import com.example.lisiyan.cloudlook.view.webview.config.IWebPageView;
+import com.example.lisiyan.cloudlook.view.webview.config.MyWebChromeClient;
 import com.example.lisiyan.cloudlook.view.webview.config.MyWebViewClient;
 import com.jaeger.library.StatusBarUtil;
 
@@ -41,7 +43,7 @@ public class WebViewActivity extends AppCompatActivity implements IWebPageView{
     // 网页是否加载完成
     public boolean mPageFinish;
     // 加载视频相关
-//    private MyWebChromeClient mWebChromeClient;
+    private MyWebChromeClient mWebChromeClient;
     // title
     private String mTitle;
     // 网页链接
@@ -72,11 +74,11 @@ public class WebViewActivity extends AppCompatActivity implements IWebPageView{
             actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.icon_back);
+//            actionBar.setHomeAsUpIndicator(R.drawable.icon_back);
         }
 
         setTitle(mTitle);
-        mTitleToolBar.setOverflowIcon(ContextCompat.getDrawable(this,R.drawable.actionbar_more));
+//        mTitleToolBar.setOverflowIcon(ContextCompat.getDrawable(this,R.drawable.actionbar_more));
         mTitleToolBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,6 +127,9 @@ public class WebViewActivity extends AppCompatActivity implements IWebPageView{
 
         /** 设置字体默认缩放大小(改变网页字体大小,setTextSize  api14被弃用)*/
         ws.setTextZoom(100);
+
+        mWebChromeClient = new MyWebChromeClient(this);
+        webView.setWebChromeClient(mWebChromeClient);
 
         webView.setWebViewClient(new MyWebViewClient(this));
 
