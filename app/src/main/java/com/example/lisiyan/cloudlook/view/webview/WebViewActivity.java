@@ -2,16 +2,20 @@ package com.example.lisiyan.cloudlook.view.webview;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
@@ -58,6 +62,44 @@ public class WebViewActivity extends AppCompatActivity implements IWebPageView{
         initTitle();
         initWebView();
         webView.loadUrl(mUrl);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        webView.onResume();
+        // 支付宝网页版在打开文章详情之后,无法点击按钮下一步
+        webView.resumeTimers();
+        // 设置为横屏
+        if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        webView.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        videoFullView.removeAllViews();
+        if (webView != null) {
+            ViewGroup parent = (ViewGroup) webView.getParent();
+            if (parent != null) {
+                parent.removeView(webView);
+            }
+            webView.removeAllViews();
+            webView.loadUrl("about:blank");
+            webView.stopLoading();
+            webView.setWebChromeClient(null);
+            webView.setWebViewClient(null);
+            webView.destroy();
+            webView = null;
+        }
+
     }
 
     private void initTitle(){
@@ -125,12 +167,16 @@ public class WebViewActivity extends AppCompatActivity implements IWebPageView{
         // WebView是否支持多个窗口。
         ws.setSupportMultipleWindows(true);
 
+        // webview从5.0开始默认不允许混合模式,https中不能加载http资源,需要设置开启。
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ws.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
+
         /** 设置字体默认缩放大小(改变网页字体大小,setTextSize  api14被弃用)*/
         ws.setTextZoom(100);
 
         mWebChromeClient = new MyWebChromeClient(this);
         webView.setWebChromeClient(mWebChromeClient);
-
         webView.setWebViewClient(new MyWebViewClient(this));
 
 
@@ -184,7 +230,7 @@ public class WebViewActivity extends AppCompatActivity implements IWebPageView{
             if (progress > 900) {
                 mProgressBar.setProgress(progress);
                 if (progress == 1000) {
-                    mProgressBar.setVisibility(View.GONE);
+//                    mProgressBar.setVisibility(View.GONE);
                 }
             }
         }
@@ -248,6 +294,18 @@ public class WebViewActivity extends AppCompatActivity implements IWebPageView{
         }
     }
 
+    public FrameLayout getVideoFullView() {
+        return videoFullView;
+    }
+
+    /**
+     * 全屏时按返加键执行退出全屏方法
+     */
+    public void hideCustomView() {
+        mWebChromeClient.onHideCustomView();
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    }
+
     /**
      * 打开网页:
      *
@@ -261,4 +319,28 @@ public class WebViewActivity extends AppCompatActivity implements IWebPageView{
         intent.putExtra("mTitle", mTitle);
         mContext.startActivity(intent);
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            //全屏播放退出全屏
+            if (mWebChromeClient.inCustomView()) {
+                hideCustomView();
+                return true;
+
+                //返回网页上一页
+            } else if (webView.canGoBack()) {
+                webView.goBack();
+                return true;
+
+                //退出网页
+            } else {
+                webView.loadUrl("about:blank");
+                finish();
+            }
+        }
+        return false;
+    }
+
+
 }

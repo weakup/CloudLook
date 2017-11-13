@@ -2,37 +2,33 @@ package com.example.lisiyan.cloudlook.ui.gank.child;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 
+import com.bumptech.glide.Glide;
 import com.example.lisiyan.cloudlook.R;
 import com.example.lisiyan.cloudlook.adapter.EverydayAdapter;
+import com.example.lisiyan.cloudlook.app.Constants;
 import com.example.lisiyan.cloudlook.base.BaseFragment;
 import com.example.lisiyan.cloudlook.bean.AndroidBean;
 import com.example.lisiyan.cloudlook.databinding.FragmentEverydayBinding;
 import com.example.lisiyan.cloudlook.databinding.HeaderItemEverydayBinding;
 import com.example.lisiyan.cloudlook.http.RequestImpl;
+import com.example.lisiyan.cloudlook.http.cache.ACache;
 import com.example.lisiyan.cloudlook.model.EverydayModel;
-
-import org.reactivestreams.Subscription;
+import com.example.lisiyan.cloudlook.utils.SPUtils;
+import com.example.lisiyan.cloudlook.utils.TimeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 /**
  * Created by lisiyan on 2017/10/30.
@@ -40,6 +36,7 @@ import io.reactivex.functions.Consumer;
 
 public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
 
+    private ACache maCache;
     private RotateAnimation animation;
     private HeaderItemEverydayBinding mHeaderBinding;
     private ArrayList<List<AndroidBean>> mLists;
@@ -48,6 +45,13 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
     private View mFooterView;
     private EverydayAdapter mEverydayAdapter;
     private boolean mIsPrepared = false;
+    private boolean mIsFirst = true;
+    // 是否是上一天的请求
+    private boolean isOldDayRequest;
+    // 记录请求的日期
+    String year = getTodayTime().get(0);
+    String month = getTodayTime().get(1);
+    String day = getTodayTime().get(2);
 
 
     @Override
@@ -69,9 +73,15 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
         animation.setRepeatCount(10);
         bindingView.ivLoading.setAnimation(animation);
         animation.startNow();
-        mEverydayModel = new EverydayModel();
-        mHeaderBinding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),R.layout.header_item_everyday,null,false);
 
+        maCache = ACache.get(getContext());
+        mEverydayModel = new EverydayModel();
+
+
+
+        mHeaderBinding = DataBindingUtil
+                .inflate(LayoutInflater.from(getContext()),R.layout.header_item_everyday,null,false);
+        initLocalSetting();
         initRecycleView();
         mIsPrepared = true;
         /**
@@ -83,13 +93,27 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
 
     }
 
+    private void initLocalSetting(){
+
+        mEverydayModel.setData(getTodayTime().get(0), getTodayTime().get(1), getTodayTime().get(2));
+//去掉日前面的0
+        mHeaderBinding.includeEveryday.tvDailyText.setText(getTodayTime().get(2).indexOf("0") == 0?
+                getTodayTime().get(2).replace("0", "") : getTodayTime().get(2));
+        mHeaderBinding.includeEveryday.ibXiadu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+    }
+
     private void initRecycleView(){
 
         bindingView.xrvEveryday.setPullRefreshEnabled(false);
         bindingView.xrvEveryday.setLoadingMoreEnabled(false);
 
         if (mHeaderView == null){
-
             mHeaderView = mHeaderBinding.getRoot();
             bindingView.xrvEveryday.addHeaderView(mHeaderView);
         }
@@ -113,9 +137,31 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
         if (!mIsVisible || !mIsPrepared) {
             return;
         }
+        String oneData = SPUtils.getString("everyday_data", "2016-11-26");
+        if (!oneData.equals(TimeUtil.getData())){// 是第二天
+            if (TimeUtil.isRightTime()){//大于12：30,请求
 
-//        showRotaLoading(true);
-        showContentData();
+                isOldDayRequest = false;
+                mEverydayModel.setData(getTodayTime().get(0),getTodayTime().get(1),getTodayTime().get(2));
+                showRotaLoading(true);
+                showContentData();
+            } else {// 小于12:30，取缓存没有请求前一天
+
+                List<String> lastTime = TimeUtil.getLastTime(getTodayTime().get(0),getTodayTime().get(1),getTodayTime().get(2));
+                mEverydayModel.setData(lastTime.get(0),lastTime.get(1),lastTime.get(2));
+                year = lastTime.get(0);
+                month = lastTime.get(1);
+                day = lastTime.get(2);
+
+                isOldDayRequest = true;// 是昨天
+                getACacheData();
+
+            }
+        }else {// 当天，取缓存
+
+            isOldDayRequest = false;
+            getACacheData();
+        }
 
     }
 
@@ -136,6 +182,7 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
                     setAdapter(mLists);
                 }else {
 
+                    requestBeforeData();
                 }
 
             }
@@ -160,6 +207,42 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
         });
     }
 
+    //网络请求没取到 先取缓存，再取前一天数据
+
+    private void requestBeforeData(){
+
+        mLists = (ArrayList<List<AndroidBean>>) maCache.getAsObject(Constants.EVERYDAY_CONTENT);
+        if (mLists != null && mLists.size() >0){
+            setAdapter(mLists);
+        }else {
+            // 一直请求，知道请求到数据为止
+            ArrayList<String> lastTime = TimeUtil.getLastTime(year, month, day);
+            mEverydayModel.setData(lastTime.get(0), lastTime.get(1), lastTime.get(2));
+            year = lastTime.get(0);
+            month = lastTime.get(1);
+            day = lastTime.get(2);
+            showContentData();
+        }
+    }
+
+    private void getACacheData(){
+
+        if (!mIsFirst){
+            return;
+        }
+
+        mLists = (ArrayList<List<AndroidBean>>) maCache.getAsObject(Constants.EVERYDAY_CONTENT);
+        if (mLists != null && mLists.size() >0){
+
+            setAdapter(mLists);
+        }else {
+
+            showRotaLoading(true);
+            showContentData();
+        }
+
+    }
+//正在为你开启干货
     private void showRotaLoading(boolean isLoading) {
         if (isLoading) {
             bindingView.llLoading.setVisibility(View.VISIBLE);
@@ -172,7 +255,7 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
         }
     }
 
-    private void setAdapter(List<List<AndroidBean>> lists){
+    private void setAdapter(ArrayList<List<AndroidBean>> lists){
 
       showRotaLoading(false);
       if (mEverydayAdapter == null){
@@ -182,11 +265,59 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
       }
 
       mEverydayAdapter.addAll(lists);
+      //只缓存一天的数据，更新，缓存3天
+      maCache.remove(Constants.EVERYDAY_CONTENT);
+      maCache.put(Constants.EVERYDAY_CONTENT,lists,259200);
+      if (isOldDayRequest){
+          List<String> lastTime = TimeUtil.getLastTime(getTodayTime().get(0), getTodayTime().get(1), getTodayTime().get(2));
+          SPUtils.putString("everyday_data", lastTime.get(0) + "-" + lastTime.get(1) + "-" + lastTime.get(2));
+      }else {
+        // 保存请求的日期
+          SPUtils.putString("everyday_data", TimeUtil.getData());
+      }
+      mIsFirst = false;
       bindingView.xrvEveryday.setAdapter(mEverydayAdapter);
       mEverydayAdapter.notifyDataSetChanged();
 
     }
 
+    private List<String> getTodayTime(){
 
+        String data = TimeUtil.getData();
+        String[] split = data.split("-");
+        String year = split[0];
+        String month = split[1];
+        String day = split[2];
+        List<String> list = new ArrayList<>();
+        list.add(year);
+        list.add(month);
+        list.add(day);
+        return list;
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        bindingView.xrvEveryday.setFocusable(false);
+        Glide.with(getActivity()).resumeRequests();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Glide.with(getActivity()).pauseRequests();
+    }
+
+    @Override
+    protected void onRefresh() {
+        super.onRefresh();
+        showContentView();
+        showRotaLoading(true);
+        loadData();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 }
