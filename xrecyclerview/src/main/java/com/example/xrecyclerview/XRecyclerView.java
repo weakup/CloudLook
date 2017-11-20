@@ -1,11 +1,11 @@
 package com.example.xrecyclerview;
 
 import android.content.Context;
-import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
@@ -171,7 +171,7 @@ public class XRecyclerView extends RecyclerView{
     @Override
     public void setAdapter(Adapter adapter) {
         mWrapAdapter = new WrapAdapter(mHeaderViews,mFootViews,adapter);
-        super.setAdapter(adapter);
+        super.setAdapter(mWrapAdapter);
         adapter.registerAdapterDataObserver(mDataObserver);
     }
 
@@ -192,7 +192,7 @@ public class XRecyclerView extends RecyclerView{
                 lastVisibleItemPosition = findMax(into);
             }else {
 
-                lastVisibleItemPosition = ((GridLayoutManager) layoutManager).findLastVisibleItemPosition();
+                lastVisibleItemPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
             }
 
             if (layoutManager.getChildCount() > 0

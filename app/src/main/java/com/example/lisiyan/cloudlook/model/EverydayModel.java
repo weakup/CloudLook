@@ -2,11 +2,10 @@ package com.example.lisiyan.cloudlook.model;
 
 import com.example.lisiyan.cloudlook.app.ConstantsImageUrl;
 import com.example.lisiyan.cloudlook.bean.AndroidBean;
+import com.example.lisiyan.cloudlook.bean.FrontpageBean;
 import com.example.lisiyan.cloudlook.bean.GankIoDayBean;
 import com.example.lisiyan.cloudlook.http.HttpClient;
 import com.example.lisiyan.cloudlook.http.RequestImpl;
-
-import org.reactivestreams.Subscription;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +13,6 @@ import java.util.Random;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
@@ -38,6 +36,42 @@ public class EverydayModel {
         this.year = year;
         this.month = month;
         this.day = day;
+    }
+
+    /**
+     * 轮播图
+     */
+    public void showBanncerPage(final RequestImpl listener){
+
+        HttpClient.Builder.getTingServer().getFrontpage()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<FrontpageBean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        listener.addSubscription(d);
+                    }
+
+                    @Override
+                    public void onNext(FrontpageBean frontpageBean) {
+
+                        listener.loadSuccess(frontpageBean);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                        listener.loadFailed();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+
+                    }
+                });
+
+
     }
 
 

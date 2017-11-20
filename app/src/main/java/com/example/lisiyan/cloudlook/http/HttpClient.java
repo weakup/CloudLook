@@ -1,6 +1,7 @@
 package com.example.lisiyan.cloudlook.http;
 
 import com.example.http.HttpUtils;
+import com.example.lisiyan.cloudlook.bean.FrontpageBean;
 import com.example.lisiyan.cloudlook.bean.GankIoDataBean;
 import com.example.lisiyan.cloudlook.bean.GankIoDayBean;
 
@@ -20,7 +21,17 @@ public interface HttpClient {
             return HttpUtils.getInstance().getGankIOServer(HttpClient.class);
         }
 
+        public static HttpClient getTingServer(){
+            return HttpUtils.getInstance().getTingServer(HttpClient.class);
+        }
+
     }
+
+    /**
+     * 首页轮播图
+     */
+    @GET("ting?from=android&version=5.8.1.0&channel=ppzs&operator=3&method=baidu.ting.plaza.index&cuid=89CF1E1A06826F9AB95A34DC0F6AAA14")
+    Observable<FrontpageBean> getFrontpage();
 
     /**
      * 分类数据: http://gank.io/api/data/数据类型/请求个数/第几页

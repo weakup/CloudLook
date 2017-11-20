@@ -72,10 +72,8 @@ public class EverydayAdapter extends BaseRecyclerViewAdapter<List<AndroidBean>> 
 
             case TYPE_TITLE:
                 return new TitleHoder(parent,R.layout.item_everyday_title);
-
             case TYPE_ONE:
                 return new OneHolder(parent,R.layout.item_everyday_one);
-
             case TYPE_TWO:
                 return new TwoHolder(parent,R.layout.item_everyday_two);
             default:

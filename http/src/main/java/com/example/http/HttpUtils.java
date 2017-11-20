@@ -2,7 +2,6 @@ package com.example.http;
 
 import android.content.Context;
 
-import com.example.http.utils.CheckNetwork;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.FieldNamingStrategy;
 import com.google.gson.Gson;
@@ -40,9 +39,12 @@ public class HttpUtils {
     private Gson gson;
     private Context context;
     private Object gankHttps;
+    private Object doubanHttps;
+    private Object dongtingHttps;
     private boolean debug;
 
     private final static String API_GANKIO = "https://gank.io/api/";
+    private final static String API_TING = "https://tingapi.ting.baidu.com/v1/restserver/";
 
     public static HttpUtils getInstance(){
 
@@ -188,5 +190,16 @@ public class HttpUtils {
         }
 
         return (T) gankHttps;
+    }
+
+    public <T> T getTingServer(Class<T> a) {
+        if (dongtingHttps == null) {
+            synchronized (HttpUtils.class) {
+                if (dongtingHttps == null) {
+                    dongtingHttps = getBuilder(API_TING).build().create(a);
+                }
+            }
+        }
+        return (T) dongtingHttps;
     }
 }

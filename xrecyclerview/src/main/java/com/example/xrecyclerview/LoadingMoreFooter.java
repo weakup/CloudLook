@@ -51,6 +51,7 @@ public class LoadingMoreFooter extends LinearLayout {
 
         setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
+
     }
 
     public void setState(int state){

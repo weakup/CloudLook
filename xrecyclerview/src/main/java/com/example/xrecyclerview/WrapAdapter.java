@@ -11,7 +11,7 @@ import android.view.ViewGroup;
  * Created by lisiyan on 2017/11/1.
  */
 
-public class WrapAdapter extends RecyclerView.Adapter {
+public class WrapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int TYPE_REFRESH_HEADER = -5;
     private static final int TYPE_HEADER = -4;
@@ -138,7 +138,7 @@ public class WrapAdapter extends RecyclerView.Adapter {
         int adapterCount;
         if(mAdapter != null){
             adapterCount = mAdapter.getItemCount();
-            if (adjPosition > adapterCount){
+            if (adjPosition < adapterCount){
                 return mAdapter.getItemViewType(adjPosition);
             }
         }

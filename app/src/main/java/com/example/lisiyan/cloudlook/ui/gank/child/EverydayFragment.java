@@ -17,11 +17,13 @@ import com.example.lisiyan.cloudlook.adapter.EverydayAdapter;
 import com.example.lisiyan.cloudlook.app.Constants;
 import com.example.lisiyan.cloudlook.base.BaseFragment;
 import com.example.lisiyan.cloudlook.bean.AndroidBean;
+import com.example.lisiyan.cloudlook.bean.FrontpageBean;
 import com.example.lisiyan.cloudlook.databinding.FragmentEverydayBinding;
 import com.example.lisiyan.cloudlook.databinding.HeaderItemEverydayBinding;
 import com.example.lisiyan.cloudlook.http.RequestImpl;
 import com.example.lisiyan.cloudlook.http.cache.ACache;
 import com.example.lisiyan.cloudlook.model.EverydayModel;
+import com.example.lisiyan.cloudlook.utils.GlideImageLoader;
 import com.example.lisiyan.cloudlook.utils.SPUtils;
 import com.example.lisiyan.cloudlook.utils.TimeUtil;
 
@@ -39,6 +41,7 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
     private ACache maCache;
     private RotateAnimation animation;
     private HeaderItemEverydayBinding mHeaderBinding;
+    private ArrayList<String> mBannerImages;
     private ArrayList<List<AndroidBean>> mLists;
     private EverydayModel mEverydayModel;
     private View mHeaderView;
@@ -76,7 +79,7 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
 
         maCache = ACache.get(getContext());
         mEverydayModel = new EverydayModel();
-
+        mBannerImages = (ArrayList<String>) maCache.getAsObject(Constants.BANNER_PIC);
 
 
         mHeaderBinding = DataBindingUtil
@@ -99,7 +102,7 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
 //去掉日前面的0
         mHeaderBinding.includeEveryday.tvDailyText.setText(getTodayTime().get(2).indexOf("0") == 0?
                 getTodayTime().get(2).replace("0", "") : getTodayTime().get(2));
-        mHeaderBinding.includeEveryday.ibXiadu.setOnClickListener(new View.OnClickListener() {
+        mHeaderBinding.includeEveryday.ibXiandu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -130,9 +133,57 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
 
     }
 
+    private void loadBannerPicture(){
+
+        mEverydayModel.showBanncerPage(new RequestImpl() {
+            @Override
+            public void loadSuccess(Object object) {
+                if (mBannerImages == null){
+                    mBannerImages = new ArrayList<>();
+                }else {
+
+                    mBannerImages.clear();
+                }
+
+                FrontpageBean bean = (FrontpageBean) object;
+                if (bean != null && bean.getResult() != null && bean.getResult().getFocus() != null && bean.getResult().getFocus().getResult() != null){
+                    final List<FrontpageBean.ResultBeanXXXXXXXXXXXXXXX.FocusBean.ResultBeanXXXXXXXXXXX> result = bean.getResult().getFocus().getResult();
+                    if (result !=null && result.size() > 0){
+                        for (int i=0 ; i< result.size(); i++){
+                            //获取所有图片
+                            mBannerImages.add(result.get(i).getRandpic());
+                        }
+
+                        mHeaderBinding.banner.setImages(mBannerImages).setImageLoader(new GlideImageLoader()).start();
+                        maCache.remove(Constants.BANNER_PIC);
+                        maCache.put(Constants.BANNER_PIC, mBannerImages, 30000);
+                    }
+                }
+            }
+
+            @Override
+            public void loadFailed() {
+
+            }
+
+            @Override
+            public void addSubscription(Disposable d) {
+
+                EverydayFragment.this.addDisposable(d);
+            }
+        });
+
+    }
+
 
     @Override
     protected void loadData() {
+
+        // 显示时轮播图滚动
+        if (mHeaderBinding != null && mHeaderBinding.banner != null) {
+            mHeaderBinding.banner.startAutoPlay();
+            mHeaderBinding.banner.setDelayTime(4000);
+        }
 
         if (!mIsVisible || !mIsPrepared) {
             return;
@@ -144,6 +195,7 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
                 isOldDayRequest = false;
                 mEverydayModel.setData(getTodayTime().get(0),getTodayTime().get(1),getTodayTime().get(2));
                 showRotaLoading(true);
+                loadBannerPicture();
                 showContentData();
             } else {// 小于12:30，取缓存没有请求前一天
 
@@ -227,8 +279,15 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
 
     private void getACacheData(){
 
+
         if (!mIsFirst){
             return;
+        }
+
+        if (mBannerImages != null && mBannerImages.size() > 0) {
+            mHeaderBinding.banner.setImages(mBannerImages).setImageLoader(new GlideImageLoader()).start();
+        } else {
+            loadBannerPicture();
         }
 
         mLists = (ArrayList<List<AndroidBean>>) maCache.getAsObject(Constants.EVERYDAY_CONTENT);
@@ -293,6 +352,14 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
         list.add(month);
         list.add(day);
         return list;
+    }
+
+    @Override
+    protected void onInvisible() {
+        // 不可见时轮播图停止滚动
+        if (mHeaderBinding != null && mHeaderBinding.banner != null) {
+            mHeaderBinding.banner.stopAutoPlay();
+        }
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.example.xrecyclerview;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.graphics.Paint;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -57,8 +56,8 @@ public class YunRefreshHeader extends LinearLayout implements BaseRefreshHeader{
         mMeasuredHeight = getMeasuredHeight();
         setGravity(Gravity.CENTER_HORIZONTAL);
         mContainer = findViewById(R.id.container);
-        mContainer.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,0));
-        this.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        mContainer.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,0));
+        this.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
     }
 
     @Override
