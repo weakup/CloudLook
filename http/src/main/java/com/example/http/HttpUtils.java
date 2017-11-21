@@ -46,6 +46,12 @@ public class HttpUtils {
     private final static String API_GANKIO = "https://gank.io/api/";
     private final static String API_TING = "https://tingapi.ting.baidu.com/v1/restserver/";
 
+    /**
+     * 分页数据，每页的数量
+     */
+    public static int per_page = 10;
+    public static int per_page_more = 20;
+
     public static HttpUtils getInstance(){
 
         if (instance == null){

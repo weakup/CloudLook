@@ -217,6 +217,9 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
 
     }
 
+    /**
+     * 加载正文内容
+     */
     private void showContentData() {
 
         mEverydayModel.showRecyclerViewData(new RequestImpl() {
@@ -232,6 +235,7 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
                 if (mLists.size() > 0 && mLists.get(0).size() > 0){
 
                     setAdapter(mLists);
+
                 }else {
 
                     requestBeforeData();

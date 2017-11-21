@@ -1,9 +1,9 @@
 package com.example.lisiyan.cloudlook.utils;
 
+import android.databinding.BindingAdapter;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.annotation.GlideOption;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.lisiyan.cloudlook.R;
@@ -39,6 +39,19 @@ public class ImgLoadUtil {
 
     }
 
+    private static int getDefaultPic(int type){
+
+        switch (type) {
+            case 0:// 电影
+                return R.drawable.img_default_movie;
+            case 1:// 妹子
+                return R.drawable.img_default_meizi;
+            case 2:// 书籍
+                return R.drawable.img_default_book;
+        }
+        return R.drawable.img_default_meizi;
+    }
+
 
     /**
      *
@@ -61,6 +74,22 @@ public class ImgLoadUtil {
 
     }
 
+    /**
+     * 书籍、妹子图、电影列表图
+     * 默认图区别
+     */
+    public static void displayEspImage(String url, ImageView imageView, int type){
+
+        RequestOptions requestOptions = new RequestOptions()
+                .error(getDefaultPic(type))
+                .placeholder(getDefaultPic(type));
+
+        Glide.with(imageView.getContext())
+                .load(url)
+                .apply(requestOptions)
+                .into(imageView);
+    }
+
     private static int getMusicDefaultPic(int imgNumber) {
         switch (imgNumber) {
             case 1:
@@ -72,5 +101,22 @@ public class ImgLoadUtil {
         }
         return R.drawable.img_four_bi_three;
     }
+
+    /**
+     * 妹子，电影列表图
+     *
+     * @param defaultPicType 电影：0；妹子：1； 书籍：2
+     * 1. 方法名可与注解名一样，也可不一样
+     * 2. 第一个参数必须是View，就是自定义属性所在的View
+     * 3. 第二个参数就是自定义属性的值，与注解值对应。这是数组，可多个
+     * displayFadeImage -> url   defaultPictype -> de...
+     */
+
+    @BindingAdapter({"android:displayFadeImage", "android:defaultPicType"})
+    public static void displayFadeImage(ImageView imageView,String url,int defaultPicType){
+        displayEspImage(url,imageView,defaultPicType);
+    }
+
+
 
 }

@@ -9,6 +9,7 @@ import com.example.lisiyan.cloudlook.R;
 import com.example.lisiyan.cloudlook.base.BaseFragment;
 import com.example.lisiyan.cloudlook.databinding.FragmentGankBinding;
 import com.example.lisiyan.cloudlook.ui.gank.child.EverydayFragment;
+import com.example.lisiyan.cloudlook.ui.gank.child.WelfareFragment;
 import com.example.lisiyan.cloudlook.view.MyFragmentPagerAdapter;
 
 import java.util.ArrayList;
@@ -56,6 +57,7 @@ public class GankFragment extends BaseFragment<FragmentGankBinding>{
         mTitleList.add("干货订制");
         mTitleList.add("大安卓");
         mFragments.add(new EverydayFragment());
+        mFragments.add(new WelfareFragment());
 
     }
 
