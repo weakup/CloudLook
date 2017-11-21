@@ -75,6 +75,22 @@ public class ImgLoadUtil {
     }
 
     /**
+     * 用于干货item，将gif图转换为静态图
+     */
+    public static void displayGif(String url, ImageView imageView) {
+
+        RequestOptions requestOptions = new RequestOptions()
+                .error(R.drawable.img_one_bi_one)
+                .placeholder(R.drawable.img_one_bi_one);
+
+        Glide.with(imageView.getContext())
+                .asBitmap()
+                .load(url)
+                .apply(requestOptions)
+                .into(imageView);
+    }
+
+    /**
      * 书籍、妹子图、电影列表图
      * 默认图区别
      */
