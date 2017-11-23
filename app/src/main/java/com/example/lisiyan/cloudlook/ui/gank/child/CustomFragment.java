@@ -1,11 +1,13 @@
 package com.example.lisiyan.cloudlook.ui.gank.child;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.TextView;
 
+import com.cocosw.bottomsheet.BottomSheet;
 import com.example.http.HttpUtils;
 import com.example.lisiyan.cloudlook.R;
 import com.example.lisiyan.cloudlook.adapter.AndroidAdapter;
@@ -17,6 +19,7 @@ import com.example.lisiyan.cloudlook.http.RequestImpl;
 import com.example.lisiyan.cloudlook.http.cache.ACache;
 import com.example.lisiyan.cloudlook.model.GankOtherModel;
 import com.example.lisiyan.cloudlook.utils.SPUtils;
+import com.example.lisiyan.cloudlook.utils.ToastUtil;
 import com.example.xrecyclerview.XRecyclerView;
 
 import io.reactivex.disposables.Disposable;
@@ -170,6 +173,61 @@ public class CustomFragment extends BaseFragment<FragmentCustomBinding> {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                new BottomSheet.Builder(getActivity(),R.style.BottomSheet_StyleDialog)
+                        .title("选择分类")
+                        .sheet(R.menu.gank_bottomsheet)
+                        .listener(new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                switch (which) {
+                                    case R.id.gank_all:
+                                        if (isOtherType("全部")) {
+                                            txName.setText("全部");
+                                            mType = "all";// 全部传 all
+                                            mPage = 1;
+                                            mAndroidAdapter.clear();
+                                            SPUtils.putString("gank_cala", "全部");
+                                            showLoading();
+                                            loadCustomData();
+                                        }
+                                        break;
+                                    case R.id.gank_ios:
+                                        if (isOtherType("IOS")) {
+                                            txName.setText("IOS");
+                                            mType = "iOS";// 这里有严格大小写
+                                            mPage = 1;
+                                            mAndroidAdapter.clear();
+                                            SPUtils.putString("gank_cala", "IOS");
+                                            showLoading();
+                                            loadCustomData();
+                                        }
+                                        break;
+                                    case R.id.gank_qian:
+                                        if (isOtherType("前端")) {
+                                            changeContent(txName, "前端");
+                                        }
+                                        break;
+                                    case R.id.gank_app:
+                                        if (isOtherType("App")) {
+                                            changeContent(txName, "App");
+                                        }
+                                        break;
+                                    case R.id.gank_movie:
+                                        if (isOtherType("休息视频")) {
+                                            changeContent(txName, "休息视频");
+                                        }
+                                        break;
+                                    case R.id.gank_resouce:
+                                        if (isOtherType("拓展资源")) {
+                                            changeContent(txName, "拓展资源");
+                                        }
+                                        break;
+                                }
+
+                            }
+                        }).show();
             }
         });
     }
@@ -183,6 +241,18 @@ public class CustomFragment extends BaseFragment<FragmentCustomBinding> {
         SPUtils.putString("gank_cala", content);
         showLoading();
         loadCustomData();
+    }
+
+    private boolean isOtherType(String selectType) {
+        String clickText = SPUtils.getString("gank_cala", "全部");
+        if (clickText.equals(selectType)) {
+            ToastUtil.showToast("当前已经是" + selectType + "分类");
+            return false;
+        } else {
+            // 重置XRecyclerView状态，解决 如出现刷新到底无内容再切换其他类别后，无法上拉加载的情况
+            bindingView.xrvCustom.reset();
+            return true;
+        }
     }
 
 

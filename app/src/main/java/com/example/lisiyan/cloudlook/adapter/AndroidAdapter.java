@@ -4,6 +4,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.lisiyan.cloudlook.R;
 import com.example.lisiyan.cloudlook.base.baseadapter.BaseRecycleViewHolder;
 import com.example.lisiyan.cloudlook.base.baseadapter.BaseRecyclerViewAdapter;
 import com.example.lisiyan.cloudlook.bean.GankIoDataBean;
@@ -20,12 +21,12 @@ public class AndroidAdapter extends BaseRecyclerViewAdapter<GankIoDataBean.Resul
     private boolean isAll = false;
 
     public void setAllType(boolean all) {
-        isAll = all;
+         isAll = all;
     }
 
     @Override
     public BaseRecycleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return super.onCreateViewHolder(parent, viewType);
+        return new ViewHolder(parent, R.layout.item_android);
     }
 
     private class ViewHolder extends BaseRecycleViewHolder<GankIoDataBean.ResultBean, ItemAndroidBinding>{
@@ -39,7 +40,6 @@ public class AndroidAdapter extends BaseRecyclerViewAdapter<GankIoDataBean.Resul
         public void onBindViewHolder(final GankIoDataBean.ResultBean object, int posotion) {
 
             if (isAll && "福利".equals(object.getType())){
-
                 binding.ivAllWelfare.setVisibility(View.VISIBLE);
                 binding.llWelfareOther.setVisibility(View.GONE);
                 ImgLoadUtil.displayEspImage(object.getUrl(),binding.ivAllWelfare,1);
@@ -51,13 +51,14 @@ public class AndroidAdapter extends BaseRecyclerViewAdapter<GankIoDataBean.Resul
             if (isAll){
                 binding.tvContentType.setVisibility(View.VISIBLE);
                 binding.tvContentType.setText(" · " + object.getType());
-            }{
+            }else {
                 binding.tvContentType.setVisibility(View.GONE);
             }
 
             binding.setResultsBean(object);
             binding.executePendingBindings();
 
+            //gif 换成静态图
             if (object.getImages() !=null
                     && object.getImages().size() > 0
                     && !TextUtils.isEmpty(object.getImages().get(0))){
