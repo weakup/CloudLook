@@ -24,4 +24,6 @@ public class Constants {
     public static String EVERYDAY_CONTENT = "everyday_content";
     // 缓存妹子
     public static String GANK_MEIZI = "gank_meizi";
+
+    public static String GANK_TYPE = "gank_type";
 }

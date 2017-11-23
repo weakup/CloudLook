@@ -79,11 +79,12 @@ public class CustomFragment extends BaseFragment<FragmentCustomBinding> {
             return;
         }
 
+        mAllBean = (GankIoDataBean) mACache.getAsObject(Constants.GANK_CUSTOM);
+
         if (mAllBean != null
                 && mAllBean.getResults() != null
                 && mAllBean.getResults().size() > 0) {
             showContentView();
-            mAllBean = (GankIoDataBean) mACache.getAsObject(Constants.GANK_CUSTOM);
             setAdapter(mAllBean);
         } else {
             loadCustomData();
@@ -255,5 +256,18 @@ public class CustomFragment extends BaseFragment<FragmentCustomBinding> {
         }
     }
 
+    @Override
+    protected void onRefresh() {
+        loadCustomData();
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 }
