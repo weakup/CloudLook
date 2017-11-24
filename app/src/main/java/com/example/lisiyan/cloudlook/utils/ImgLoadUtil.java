@@ -133,6 +133,25 @@ public class ImgLoadUtil {
         displayEspImage(url,imageView,defaultPicType);
     }
 
+    /**
+     * 电影列表图片
+     */
+    @BindingAdapter("android:showMovieImg")
+    public static void showMovieImg(ImageView imageView, String url) {
+
+        RequestOptions requestOptions = new RequestOptions()
+                .override((int)CommonUtils.getDimens(R.dimen.movie_detail_width), (int) CommonUtils.getDimens(R.dimen.movie_detail_height))
+                .error(getDefaultPic(0))
+                .placeholder(getDefaultPic(0));
+
+
+        Glide.with(imageView.getContext())
+                .load(url)
+                .transition(new DrawableTransitionOptions().crossFade(1500))
+                .apply(requestOptions)
+                .into(imageView);
+    }
+
 
 
 }

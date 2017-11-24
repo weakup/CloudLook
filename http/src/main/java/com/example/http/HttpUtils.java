@@ -45,6 +45,7 @@ public class HttpUtils {
 
     private final static String API_GANKIO = "https://gank.io/api/";
     private final static String API_TING = "https://tingapi.ting.baidu.com/v1/restserver/";
+    private final static String API_DOUBAN = "https://api.douban.com/";
 
     /**
      * 分页数据，每页的数量
@@ -182,6 +183,16 @@ public class HttpUtils {
         }
     }
 
+    public <T> T getDouBanServer(Class<T> a) {
+        if (doubanHttps == null) {
+            synchronized (HttpUtils.class) {
+                if (doubanHttps == null) {
+                    doubanHttps = getBuilder(API_DOUBAN).build().create(a);
+                }
+            }
+        }
+        return (T) doubanHttps;
+    }
 
 
     public <T> T getGankIOServer(Class<T> a){
