@@ -9,6 +9,7 @@ import com.example.lisiyan.cloudlook.base.baseadapter.BaseRecycleViewHolder;
 import com.example.lisiyan.cloudlook.base.baseadapter.BaseRecyclerViewAdapter;
 import com.example.lisiyan.cloudlook.bean.moviechild.SubjectsBean;
 import com.example.lisiyan.cloudlook.databinding.ItemOneBinding;
+import com.example.lisiyan.cloudlook.ui.one.OneMovieDetailActivity;
 import com.example.lisiyan.cloudlook.utils.CommonUtils;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.nineoldandroids.view.ViewHelper;
@@ -44,7 +45,7 @@ public class OneAdapter extends BaseRecyclerViewAdapter {
         }
 
         @Override
-        public void onBindViewHolder(SubjectsBean subjectsBean, int posotion) {
+        public void onBindViewHolder(final SubjectsBean subjectsBean, int posotion) {
 
             if (subjectsBean != null){
                 binding.setSubjectsBean(subjectsBean);
@@ -62,6 +63,7 @@ public class OneAdapter extends BaseRecyclerViewAdapter {
                         .subscribe(new Consumer<Object>() {
                             @Override
                             public void accept(Object o) throws Exception {
+                                OneMovieDetailActivity.start(mActivity, subjectsBean, binding.ivOnePhoto);
 
                             }
                         });

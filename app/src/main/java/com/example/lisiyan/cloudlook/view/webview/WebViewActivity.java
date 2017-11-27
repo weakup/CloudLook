@@ -3,17 +3,14 @@ package com.example.lisiyan.cloudlook.view.webview;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
@@ -22,11 +19,10 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import com.example.lisiyan.cloudlook.R;
-import com.example.lisiyan.cloudlook.utils.CommonUtils;
+import com.example.lisiyan.cloudlook.view.statusbar.StatusBarUtil;
 import com.example.lisiyan.cloudlook.view.webview.config.IWebPageView;
 import com.example.lisiyan.cloudlook.view.webview.config.MyWebChromeClient;
 import com.example.lisiyan.cloudlook.view.webview.config.MyWebViewClient;
-import com.jaeger.library.StatusBarUtil;
 
 /**
  * Created by lisiyan on 2017/11/9.

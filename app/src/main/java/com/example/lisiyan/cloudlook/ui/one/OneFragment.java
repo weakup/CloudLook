@@ -219,5 +219,7 @@ public class OneFragment extends BaseFragment<FragmentOneBinding>{
     protected void onRefresh() {
         loadHotMovie();
     }
+
+
 }
 

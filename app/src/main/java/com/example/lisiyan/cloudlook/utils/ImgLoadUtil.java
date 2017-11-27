@@ -1,5 +1,6 @@
 package com.example.lisiyan.cloudlook.utils;
 
+import android.content.Context;
 import android.databinding.BindingAdapter;
 import android.widget.ImageView;
 
@@ -7,6 +8,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.lisiyan.cloudlook.R;
+
+import jp.wasabeef.glide.transformations.BlurTransformation;
 
 /**
  * Created by lisiyan on 2017/10/24.
@@ -75,6 +78,22 @@ public class ImgLoadUtil {
     }
 
     /**
+     * 显示高斯模糊效果（电影详情页）
+     */
+    private static void displayGaussian(Context context, String url, ImageView imageView) {
+        // "23":模糊度；"4":图片缩放4倍后再进行模糊
+        RequestOptions requestOptions = new RequestOptions()
+                .error(getMusicDefaultPic(R.drawable.stackblur_default))
+                .placeholder(getMusicDefaultPic(R.drawable.stackblur_default))
+                .bitmapTransform(new BlurTransformation(23,4));
+        Glide.with(context)
+                .load(url)
+                .apply(requestOptions)
+                .transition(new DrawableTransitionOptions().crossFade(500))
+                .into(imageView);
+    }
+
+    /**
      * 用于干货item，将gif图转换为静态图
      */
     public static void displayGif(String url, ImageView imageView) {
@@ -134,6 +153,21 @@ public class ImgLoadUtil {
     }
 
     /**
+     * 电影详情页显示电影图片(等待被替换)（测试的还在，已可以弃用）
+     * 没有加载中的图
+     */
+    @BindingAdapter("android:showImg")
+    public static void showImg(ImageView imageView, String url) {
+        RequestOptions requestOptions = new RequestOptions()
+                .error(getDefaultPic(0));
+        Glide.with(imageView.getContext())
+                .load(url)
+                .apply(requestOptions)
+                .transition(new DrawableTransitionOptions().crossFade(500))
+                .into(imageView);
+    }
+
+    /**
      * 电影列表图片
      */
     @BindingAdapter("android:showMovieImg")
@@ -150,6 +184,14 @@ public class ImgLoadUtil {
                 .transition(new DrawableTransitionOptions().crossFade(1500))
                 .apply(requestOptions)
                 .into(imageView);
+    }
+
+    /**
+     * 电影详情页显示高斯背景图
+     */
+    @BindingAdapter("android:showImgBg")
+    public static void showImgBg(ImageView imageView, String url) {
+        displayGaussian(imageView.getContext(), url, imageView);
     }
 
 

@@ -32,5 +32,9 @@ public class CommonUtils {
         return Color.rgb(red, green, blue);
     }
 
+    public static String getString(int resid) {
+        return getResoure().getString(resid);
+    }
+
 
 }

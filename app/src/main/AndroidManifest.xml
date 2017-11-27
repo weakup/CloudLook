@@ -33,6 +33,10 @@
         <activity android:name=".view.webview.WebViewActivity"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".ui.one.OneMovieDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyScrollPage"/>
+
     </application>
 
 </manifest>

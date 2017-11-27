@@ -37,9 +37,15 @@ import com.example.lisiyan.cloudlook.view.CustomChangeBounds;
 import com.example.lisiyan.cloudlook.view.MyNestedScrollView;
 import com.example.lisiyan.cloudlook.view.statusbar.StatusBarUtil;
 import com.example.lisiyan.cloudlook.view.test.StatusBarUtils;
+import com.jakewharton.rxbinding2.view.RxView;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
 /**
@@ -76,6 +82,7 @@ public abstract class BaseHeaderActivity<HV extends ViewDataBinding,SV extends  
 
     @Override
     public void setContentView(int layoutResID) {
+
         View ll = getLayoutInflater().inflate(R.layout.activity_header_base,null);
         // 内容
         bindingContentView = DataBindingUtil.inflate(getLayoutInflater(),layoutResID,null,false);
@@ -116,6 +123,30 @@ public abstract class BaseHeaderActivity<HV extends ViewDataBinding,SV extends  
         initSlideShapeTheme(setHeaderImgUrl(), setHeaderImageView());
 
 
+        setToolBar();
+
+        ImageView img = getView(R.id.img_progress);
+
+        // 加载动画
+
+        mAnimationDrawable = (AnimationDrawable) img.getDrawable();
+
+        // 默认进入页面就开启动画
+        if (!mAnimationDrawable.isRunning()) {
+            mAnimationDrawable.start();
+        }
+        // 点击加载失败布局
+        RxView.clicks(refresh)
+                .throttleFirst(1000, TimeUnit.MILLISECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        showLoading();
+                        onRefresh();
+                    }
+                });
+
+        bindingContentView.getRoot().setVisibility(View.GONE);
     }
 
     /**
@@ -140,6 +171,26 @@ public abstract class BaseHeaderActivity<HV extends ViewDataBinding,SV extends  
         return new ImageView(this);
     }
 
+
+    /**
+     * 1. 标题
+     */
+    public void setTitle(CharSequence text) {
+        bindingTitleView.tbBaseTitle.setTitle(text);
+    }
+
+    /**
+     * 2. 副标题
+     */
+    protected void setSubTitle(CharSequence text) {
+        bindingTitleView.tbBaseTitle.setSubtitle(text);
+    }
+
+    /**
+     * 3. toolbar 单击"更多信息"
+     */
+    protected void setTitleClickMore() {
+    }
 
     /**
      * 设置自定义 Shared Element切换动画
@@ -378,7 +429,6 @@ public abstract class BaseHeaderActivity<HV extends ViewDataBinding,SV extends  
             //去除默认Title显示
             actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.icon_back);
         }
 
         bindingTitleView.tbBaseTitle.setTitleTextAppearance(this, R.style.ToolBar_Title);
@@ -405,5 +455,26 @@ public abstract class BaseHeaderActivity<HV extends ViewDataBinding,SV extends  
     public boolean onCreateOptionsMenu(Menu menu) {
 //        getMenuInflater().inflate(R.menu.);
         return true;
+    }
+
+    @Override
+    public boolean onPreparePanel(int featureId, View view, Menu menu) {
+       if (menu != null){
+           if (menu.getClass().getSimpleName().equals("MenuBuilder")){
+
+               try {
+                   Method m = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
+                   m.setAccessible(true);
+                   m.invoke(menu,true);
+               } catch (NoSuchMethodException e) {
+                   e.printStackTrace();
+               } catch (IllegalAccessException e) {
+                   e.printStackTrace();
+               } catch (InvocationTargetException e) {
+                   e.printStackTrace();
+               }
+           }
+       }
+        return super.onPrepareOptionsPanel(view,menu);
     }
 }

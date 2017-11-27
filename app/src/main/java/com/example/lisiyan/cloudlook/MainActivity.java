@@ -1,23 +1,21 @@
 package com.example.lisiyan.cloudlook;
 
 import android.databinding.DataBindingUtil;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -26,13 +24,10 @@ import com.example.lisiyan.cloudlook.databinding.NavHeaderMainBinding;
 import com.example.lisiyan.cloudlook.ui.book.BookFragment;
 import com.example.lisiyan.cloudlook.ui.gank.GankFragment;
 import com.example.lisiyan.cloudlook.ui.one.OneFragment;
-import com.example.lisiyan.cloudlook.utils.CommonUtils;
 import com.example.lisiyan.cloudlook.utils.ImgLoadUtil;
 import com.example.lisiyan.cloudlook.view.MyFragmentPagerAdapter;
-import com.jaeger.library.StatusBarUtil;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,ViewPager.OnPageChangeListener {
