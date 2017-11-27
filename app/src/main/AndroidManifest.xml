@@ -37,6 +37,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/MyScrollPage"/>
 
+        <activity
+            android:name=".ui.one.DoubanTopActivity"
+            android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>

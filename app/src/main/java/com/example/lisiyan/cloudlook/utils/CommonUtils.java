@@ -1,7 +1,9 @@
 package com.example.lisiyan.cloudlook.utils;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 
 import com.example.lisiyan.cloudlook.app.CloudLookApplication;
 
@@ -19,6 +21,10 @@ public class CommonUtils {
 
     public static float getDimens(int resId) {
         return getResoure().getDimension(resId);
+    }
+
+    public static int getColor(Context context,int resid) {
+        return ContextCompat.getColor(context,resid);
     }
 
     /**

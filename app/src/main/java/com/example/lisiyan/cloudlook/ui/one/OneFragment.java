@@ -189,7 +189,7 @@ public class OneFragment extends BaseFragment<FragmentOneBinding>{
         if (mHeaderView == null){
 
             mHeaderView = View.inflate(getContext(),R.layout.header_item_one,null);
-            View llMovieTop = mHeaderView.findViewById(R.id.ll_moview_top);
+            final View llMovieTop = mHeaderView.findViewById(R.id.ll_moview_top);
             ImageView ivImg = mHeaderView.findViewById(R.id.iv_img);
             ImgLoadUtil.displayRandom(3, ConstantsImageUrl.ONE_URL_01,ivImg);
 
@@ -198,7 +198,7 @@ public class OneFragment extends BaseFragment<FragmentOneBinding>{
                     .subscribe(new Consumer<Object>() {
                         @Override
                         public void accept(Object o) throws Exception {
-
+                            DoubanTopActivity.start(llMovieTop.getContext());
                         }
                     });
         }
