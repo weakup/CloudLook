@@ -195,5 +195,20 @@ public class ImgLoadUtil {
     }
 
 
+    /**
+     * 书籍列表图片
+     */
+    @BindingAdapter("android:showBookImg")
+    public static void showBookImg(ImageView imageView, String url) {
+        RequestOptions requestOptions = new RequestOptions();
+        requestOptions.error(getDefaultPic(2))
+                .placeholder(getDefaultPic(2))
+                .override((int) CommonUtils.getDimens(R.dimen.book_detail_width), (int) CommonUtils.getDimens(R.dimen.book_detail_height));
+        Glide.with(imageView.getContext())
+                .load(url)
+                .apply(requestOptions)
+                .transition(new DrawableTransitionOptions().crossFade(500))
+                .into(imageView);
+    }
 
 }

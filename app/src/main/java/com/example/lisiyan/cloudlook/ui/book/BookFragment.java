@@ -27,7 +27,7 @@ public class BookFragment extends BaseFragment<FragmentBookBinding>{
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         showLoading();
-
+        initFragmentList();
         MyFragmentPagerAdapter myFragmentPagerAdapter = new MyFragmentPagerAdapter(getChildFragmentManager(),mFragments,mTitleList);
         bindingView.vpBook.setAdapter(myFragmentPagerAdapter);
         bindingView.vpBook.setOffscreenPageLimit(2);
@@ -40,5 +40,14 @@ public class BookFragment extends BaseFragment<FragmentBookBinding>{
     @Override
     public int setContent() {
         return R.layout.fragment_book;
+    }
+
+    private void initFragmentList() {
+        mTitleList.add("文学");
+        mTitleList.add("文化");
+        mTitleList.add("生活");
+        mFragments.add(BookCustomFragment.newInstance("文学"));
+        mFragments.add(BookCustomFragment.newInstance("文化"));
+        mFragments.add(BookCustomFragment.newInstance("生活"));
     }
 }

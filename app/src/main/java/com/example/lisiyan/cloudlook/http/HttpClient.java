@@ -1,6 +1,7 @@
 package com.example.lisiyan.cloudlook.http;
 
 import com.example.http.HttpUtils;
+import com.example.lisiyan.cloudlook.bean.BookBean;
 import com.example.lisiyan.cloudlook.bean.FrontpageBean;
 import com.example.lisiyan.cloudlook.bean.GankIoDataBean;
 import com.example.lisiyan.cloudlook.bean.GankIoDayBean;
@@ -80,6 +81,14 @@ public interface HttpClient {
     @GET("v2/movie/top250")
     Observable<HotMovieBean> getMovieTop250(@Query("start") int start, @Query("count") int count);
 
+    /**
+     * 根据tag获取图书
+     *
+     * @param tag   搜索关键字
+     * @param count 一次请求的数目 最多100
+     */
 
+    @GET("v2/book/search")
+    Observable<BookBean> getBook(@Query("tag") String tag, @Query("start") int start, @Query("count") int count);
 
 }
