@@ -81,7 +81,7 @@ public class BookCustomFragment extends BaseFragment<FragmentBookCustomBinding> 
                     @Override
                     public void run() {
                         mStart = 0;
-
+                        loadCustomData();
                     }
                 },1000);
             }

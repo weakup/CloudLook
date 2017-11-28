@@ -142,7 +142,7 @@ public class EverydayModel {
             }
         };
 
-        HttpClient.Builder.getGankIOServer().getGankIoDay("2017","11","6")
+        HttpClient.Builder.getGankIOServer().getGankIoDay(year,month,day)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap(function)

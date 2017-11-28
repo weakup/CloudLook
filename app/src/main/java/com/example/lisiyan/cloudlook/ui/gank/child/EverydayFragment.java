@@ -121,7 +121,6 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
             bindingView.xrvEveryday.addHeaderView(mHeaderView);
         }
 
-
         bindingView.xrvEveryday.setLayoutManager(new LinearLayoutManager(getContext()));
 
         //设置嵌套滑动
