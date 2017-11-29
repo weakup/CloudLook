@@ -16,6 +16,7 @@ import com.example.lisiyan.cloudlook.bean.BooksBean;
 import com.example.lisiyan.cloudlook.databinding.FooterItemBookBinding;
 import com.example.lisiyan.cloudlook.databinding.HeaderItemBookBinding;
 import com.example.lisiyan.cloudlook.databinding.ItemBookBinding;
+import com.example.lisiyan.cloudlook.ui.book.BookDetailActivity;
 import com.jakewharton.rxbinding2.view.RxView;
 
 import java.util.ArrayList;
@@ -217,7 +218,7 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                     .subscribe(new Consumer<Object>() {
                         @Override
                         public void accept(Object o) throws Exception {
-
+                            BookDetailActivity.start(context,book,mBookBinding.ivTopPhoto);
                         }
                     });
         }

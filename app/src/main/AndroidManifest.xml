@@ -41,6 +41,11 @@
             android:name=".ui.one.DoubanTopActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".ui.book.BookDetailActivity"
+            android:screenOrientation="portrait" />
+
+
     </application>
 
 </manifest>
