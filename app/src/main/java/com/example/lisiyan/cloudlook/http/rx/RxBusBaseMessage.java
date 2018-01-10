@@ -13,6 +13,9 @@ public class RxBusBaseMessage {
         this.object =object;
     }
 
+    public RxBusBaseMessage() {
+    }
+
     public int getCode() {
         return code;
     }

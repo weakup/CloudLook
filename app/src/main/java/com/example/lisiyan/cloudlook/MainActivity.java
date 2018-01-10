@@ -21,6 +21,9 @@ import android.widget.ImageView;
 
 import com.example.lisiyan.cloudlook.databinding.ActivityMainBinding;
 import com.example.lisiyan.cloudlook.databinding.NavHeaderMainBinding;
+import com.example.lisiyan.cloudlook.http.rx.RxBus;
+import com.example.lisiyan.cloudlook.http.rx.RxBusBaseMessage;
+import com.example.lisiyan.cloudlook.http.rx.RxCodeConstants;
 import com.example.lisiyan.cloudlook.ui.book.BookFragment;
 import com.example.lisiyan.cloudlook.ui.gank.GankFragment;
 import com.example.lisiyan.cloudlook.ui.one.OneFragment;
@@ -29,6 +32,8 @@ import com.example.lisiyan.cloudlook.view.MyFragmentPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.functions.Consumer;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,ViewPager.OnPageChangeListener {
 
@@ -49,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         mMainBinding = DataBindingUtil.setContentView(this,R.layout.activity_main);
         initId();
-
+        initRxBus();
 
 //        StatusBarUtil.setColorNoTranslucentForDrawerLayout(this,drawerLayout,
 //                ContextCompat.getColor(this,R.color.colorTheme));
@@ -234,5 +239,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    /**
+     * 每日推荐点击"新电影热映榜"跳转
+     */
+    private void initRxBus() {
+        RxBus.getDefault().toObservable(RxCodeConstants.JUMP_TYPE_TO_ONE, RxBusBaseMessage.class)
+                .subscribe(new Consumer() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        mMainBinding.include.vpContent.setCurrentItem(1);
+                    }
+                });
     }
 }

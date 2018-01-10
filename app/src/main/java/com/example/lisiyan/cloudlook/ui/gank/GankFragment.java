@@ -8,6 +8,8 @@ import android.support.v4.app.Fragment;
 import com.example.lisiyan.cloudlook.R;
 import com.example.lisiyan.cloudlook.base.BaseFragment;
 import com.example.lisiyan.cloudlook.databinding.FragmentGankBinding;
+import com.example.lisiyan.cloudlook.http.rx.RxBus;
+import com.example.lisiyan.cloudlook.http.rx.RxCodeConstants;
 import com.example.lisiyan.cloudlook.ui.gank.child.CustomFragment;
 import com.example.lisiyan.cloudlook.ui.gank.child.EverydayFragment;
 import com.example.lisiyan.cloudlook.ui.gank.child.WelfareFragment;
@@ -15,6 +17,9 @@ import com.example.lisiyan.cloudlook.view.MyFragmentPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by lisiyan on 2017/10/26.
@@ -41,7 +46,7 @@ public class GankFragment extends BaseFragment<FragmentGankBinding>{
         bindingView.tabGank.setTabMode(TabLayout.MODE_FIXED);
         bindingView.tabGank.setupWithViewPager(bindingView.vpGank);
         showContentView();
-
+        initRxBus();
     }
 
 
@@ -63,5 +68,24 @@ public class GankFragment extends BaseFragment<FragmentGankBinding>{
 
     }
 
+    /**
+     * 每日推荐点击"更多"跳转
+     */
+    private void initRxBus() {
+        Disposable subscription = RxBus.getDefault().toObservable(RxCodeConstants.JUMP_TYPE, Integer.class)
+                .subscribe(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer integer) throws Exception {
+                        if (integer == 0) {
+                            bindingView.vpGank.setCurrentItem(3);
+                        } else if (integer == 1) {
+                            bindingView.vpGank.setCurrentItem(1);
+                        } else if (integer == 2) {
+                            bindingView.vpGank.setCurrentItem(2);
+                        }
+                    }
+                });
+        addDisposable(subscription);
+    }
 
 }

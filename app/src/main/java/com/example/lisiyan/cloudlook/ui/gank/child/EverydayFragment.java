@@ -22,10 +22,14 @@ import com.example.lisiyan.cloudlook.databinding.FragmentEverydayBinding;
 import com.example.lisiyan.cloudlook.databinding.HeaderItemEverydayBinding;
 import com.example.lisiyan.cloudlook.http.RequestImpl;
 import com.example.lisiyan.cloudlook.http.cache.ACache;
+import com.example.lisiyan.cloudlook.http.rx.RxBus;
+import com.example.lisiyan.cloudlook.http.rx.RxBusBaseMessage;
+import com.example.lisiyan.cloudlook.http.rx.RxCodeConstants;
 import com.example.lisiyan.cloudlook.model.EverydayModel;
 import com.example.lisiyan.cloudlook.utils.GlideImageLoader;
 import com.example.lisiyan.cloudlook.utils.SPUtils;
 import com.example.lisiyan.cloudlook.utils.TimeUtil;
+import com.example.lisiyan.cloudlook.view.webview.WebViewActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,10 +106,18 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
 //去掉日前面的0
         mHeaderBinding.includeEveryday.tvDailyText.setText(getTodayTime().get(2).indexOf("0") == 0?
                 getTodayTime().get(2).replace("0", "") : getTodayTime().get(2));
+
         mHeaderBinding.includeEveryday.ibXiandu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                WebViewActivity.loadUrl(v.getContext(), "https://gank.io/xiandu", "加载中...");
+            }
+        });
 
+        mHeaderBinding.includeEveryday.ibMovieHot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RxBus.getDefault().post(RxCodeConstants.JUMP_TYPE_TO_ONE, new RxBusBaseMessage());
             }
         });
 
