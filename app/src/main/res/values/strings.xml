@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CloudLook</string>
+    <string name="app_name">猿阅读</string>
     <string name="jump">跳过</string>
     <string name="username">笡听</string>
     <string name="error_load">加载失败,点击重试</string>
