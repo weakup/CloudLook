@@ -29,6 +29,10 @@ public class GankIoDataBean implements Serializable {
     @ParamNames("results")
     private List<ResultBean> results;
 
+    public void setResults(List<ResultBean> results) {
+        this.results = results;
+    }
+
     public static class ResultBean implements Serializable {
 
         @ParamNames("_id")
@@ -51,6 +55,10 @@ public class GankIoDataBean implements Serializable {
         private String who;
         @ParamNames("images")
         private List<String> images;
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
 
         public String get_id() {
             return _id;

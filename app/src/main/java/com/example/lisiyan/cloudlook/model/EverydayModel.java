@@ -151,6 +151,82 @@ public class EverydayModel {
 
     }
 
+    public void showBackRecyclerViewData(final RequestImpl listener){
+
+
+        Function<GankIoDayBean,Observable<List<List<AndroidBean>>>> function = new Function<GankIoDayBean, Observable<List<List<AndroidBean>>>>() {
+            @Override
+            public Observable<List<List<AndroidBean>>> apply(GankIoDayBean gankIoDayBean) throws Exception {
+
+                List<List<AndroidBean>> lists = new ArrayList<>();
+                GankIoDayBean.ResultsBean results =gankIoDayBean.getResults();
+
+                if (results.getAndroid() != null && results.getAndroid().size() > 0) {
+                    addUrlList(lists, results.getAndroid(), "Android");
+                }
+                if (results.getWelfare() != null && results.getWelfare().size() > 0) {
+                    addUrlList(lists, results.getWelfare(), "福利");
+                }
+                if (results.getiOS() != null && results.getiOS().size() > 0) {
+                    addUrlList(lists, results.getiOS(), "IOS");
+                }
+                if (results.getRestMovie() != null && results.getRestMovie().size() > 0) {
+                    addUrlList(lists, results.getRestMovie(), "休息视频");
+                }
+                if (results.getResource() != null && results.getResource().size() > 0) {
+                    addUrlList(lists, results.getResource(), "拓展资源");
+                }
+                if (results.getRecommend() != null && results.getRecommend().size() > 0) {
+                    addUrlList(lists, results.getRecommend(), "瞎推荐");
+                }
+                if (results.getFront() != null && results.getFront().size() > 0) {
+                    addUrlList(lists, results.getFront(), "前端");
+                }
+                if (results.getApp() != null && results.getApp().size() > 0) {
+                    addUrlList(lists, results.getApp(), "App");
+                }
+
+                return Observable.just(lists);
+            }
+        };
+
+
+
+        Observer<List<List<AndroidBean>>> observer = new Observer<List<List<AndroidBean>>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+                listener.addSubscription(d);
+
+            }
+
+            @Override
+            public void onNext(List<List<AndroidBean>> lists) {
+
+                listener.loadSuccess(lists);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+                listener.loadFailed();
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        };
+
+        HttpClient.Builder.getBackService().getBackGankIoDay("1")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(function)
+                .subscribe(observer);
+
+
+    }
+
     /**
      *这个bean 第一个位置 只有title 这个属性 有值 其余  desc type url 有值
      * @param lists  用来存储

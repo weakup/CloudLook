@@ -34,6 +34,10 @@ public interface HttpClient {
             return HttpUtils.getInstance().getDouBanServer(HttpClient.class);
         }
 
+        public static HttpClient getBackService(){
+            return HttpUtils.getInstance().getBackServer(HttpClient.class);
+        }
+
     }
 
     /**
@@ -58,6 +62,10 @@ public interface HttpClient {
      */
     @GET("day/{year}/{month}/{day}")
     Observable<GankIoDayBean> getGankIoDay(@Path("year") String year, @Path("month") String month, @Path("day") String day);
+
+
+    @GET("{page}.html")
+    Observable<GankIoDayBean> getBackGankIoDay(@Path("page")String page);
 
     /**
      * 豆瓣热映电影，每日更新

@@ -38,6 +38,7 @@ import io.reactivex.disposables.Disposable;
 
 /**
  * Created by lisiyan on 2017/10/30.
+ *  每日推荐
  */
 
 public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
@@ -261,8 +262,42 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
 
                     return;
                 }
+//丑到爆的备份访问
+                mEverydayModel.showBackRecyclerViewData(new RequestImpl() {
+                    @Override
+                    public void loadSuccess(Object object) {
 
-                showError();
+                        if (mLists != null){
+                            mLists.clear();
+                        }
+
+                        mLists = (ArrayList<List<AndroidBean>>) object;
+
+                        if (mLists.size() > 0 && mLists.get(0).size() > 0){
+
+                            setAdapter(mLists);
+
+                        }else {
+
+                            requestBeforeData();
+                        }
+                    }
+
+                    @Override
+                    public void loadFailed() {
+
+                        showError();
+
+                    }
+
+                    @Override
+                    public void addSubscription(Disposable d) {
+
+                        EverydayFragment.this.addDisposable(d);
+                    }
+                });
+
+//                showError();
 
             }
 

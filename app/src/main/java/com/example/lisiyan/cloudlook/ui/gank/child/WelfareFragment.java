@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 
-import com.example.http.HttpUtils;
 import com.example.lisiyan.cloudlook.R;
 import com.example.lisiyan.cloudlook.adapter.WelfareAdapter;
 import com.example.lisiyan.cloudlook.app.Constants;
@@ -12,25 +11,21 @@ import com.example.lisiyan.cloudlook.base.BaseFragment;
 import com.example.lisiyan.cloudlook.base.baseadapter.OnItemClickListener;
 import com.example.lisiyan.cloudlook.bean.GankIoDataBean;
 import com.example.lisiyan.cloudlook.databinding.FragmentWelfareBinding;
-import com.example.lisiyan.cloudlook.http.RequestImpl;
 import com.example.lisiyan.cloudlook.http.cache.ACache;
 import com.example.lisiyan.cloudlook.model.GankOtherModel;
-import com.example.xrecyclerview.XRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.disposables.Disposable;
-
 /**
  * Created by lisiyan on 2017/11/20.
+ * 每日x图
  */
 
 public class WelfareFragment extends BaseFragment<FragmentWelfareBinding>{
 
     private GankOtherModel model;
     private GankIoDataBean meiziBean;
-    private int mPage = 1;
     private ACache aCache;
     private WelfareAdapter mAdapter;
     private boolean isFirst = true;
@@ -52,18 +47,17 @@ public class WelfareFragment extends BaseFragment<FragmentWelfareBinding>{
         bindingView.xrvWelfare.clearHeader();
         mAdapter = new WelfareAdapter();
 
-        bindingView.xrvWelfare.setLoadingListener(new XRecyclerView.LoadingListener() {
-            @Override
-            public void onRefresh() {
-
-            }
-
-            @Override
-            public void onLoadMore() {
-                mPage++;
-                loadWelfareData();
-            }
-        });
+//        bindingView.xrvWelfare.setLoadingListener(new XRecyclerView.LoadingListener() {
+//            @Override
+//            public void onRefresh() {
+//
+//            }
+//
+//            @Override
+//            public void onLoadMore() {
+////                loadWelfareData();
+//            }
+//        });
 
         isPrepared = true;
     }
@@ -72,62 +66,16 @@ public class WelfareFragment extends BaseFragment<FragmentWelfareBinding>{
 
     private void  loadWelfareData(){
 
-        model.setData("福利",mPage, HttpUtils.per_page_more);
-        model.getGankIoData(new RequestImpl() {
-            @Override
-            public void loadSuccess(Object object) {
-                showContentView();
-                GankIoDataBean gankIoDataBean = (GankIoDataBean) object;
-                if (mPage == 1){
-                    if (gankIoDataBean != null && gankIoDataBean.getResults() !=null &&
-                            gankIoDataBean.getResults().size() > 0){
-                       imgList.clear();
-                       for (int i=0 ; i<gankIoDataBean.getResults().size();i++){
-                           imgList.add(gankIoDataBean.getResults().get(i).getUrl());
-                       }
-                        setmAdapter(gankIoDataBean);
-                        aCache.remove(Constants.GANK_MEIZI);
-                        aCache.put(Constants.GANK_MEIZI, gankIoDataBean, 30000);
-                    }
-                }else {
-                    if (gankIoDataBean != null && gankIoDataBean.getResults() != null &&
-                            gankIoDataBean.getResults().size() > 0) {
-                        bindingView.xrvWelfare.refreshComplete();
-                        mAdapter.addAll(gankIoDataBean.getResults());
-                        mAdapter.notifyDataSetChanged();
-
-                        for (int i = 0; i < gankIoDataBean.getResults().size(); i++) {
-                            imgList.add(gankIoDataBean.getResults().get(i).getUrl());
-                        }
-
-                    }else {
-
-                        bindingView.xrvWelfare.noMoreLoading();
-                    }
-                }
-            }
-
-            @Override
-            public void loadFailed() {
-
-                bindingView.xrvWelfare.refreshComplete();
-                if (mAdapter.getItemCount() == 0){
-
-                    showError();
-                }
-
-                if (mPage > 1){
-                    mPage--;
-                }
-
-            }
-
-            @Override
-            public void addSubscription(Disposable d) {
-
-                WelfareFragment.this.addDisposable(d);
-            }
-        });
+        showContentView();
+        meiziBean = new GankIoDataBean();
+        List<GankIoDataBean.ResultBean> resultBeanList = new ArrayList<>();
+        for (int i=1;i<=6;i++){
+            GankIoDataBean.ResultBean resultBean = new GankIoDataBean.ResultBean();
+            resultBean.setUrl("https://raw.githubusercontent.com/weakup/LookRespository/master/dailypicture/"+i+".jpg");
+            resultBeanList.add(resultBean);
+        }
+        meiziBean.setResults(resultBeanList);
+        setmAdapter(meiziBean);
 
     }
 

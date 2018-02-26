@@ -43,9 +43,13 @@ public class HttpUtils {
     private Object dongtingHttps;
     private boolean debug;
 
+    private Object backHttps;
+
     private final static String API_GANKIO = "https://gank.io/api/";
     private final static String API_TING = "https://tingapi.ting.baidu.com/v1/restserver/";
     private final static String API_DOUBAN = "https://api.douban.com/";
+
+    private final static String API_BACK = "https://raw.githubusercontent.com/weakup/LookRespository/master/everyfragment/";
 
     /**
      * 分页数据，每页的数量
@@ -181,6 +185,18 @@ public class HttpUtils {
 
             return chain.proceed(builder.build());
         }
+    }
+
+    public <T> T getBackServer(Class<T> a){
+        if (backHttps == null){
+            synchronized (HttpUtils.class){
+                if (backHttps == null){
+                    backHttps = getBuilder(API_BACK).build().create(a);
+                }
+            }
+        }
+
+        return (T) backHttps;
     }
 
     public <T> T getDouBanServer(Class<T> a) {
