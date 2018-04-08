@@ -2,7 +2,6 @@ package com.example.lisiyan.cloudlook.adapter;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -16,8 +15,6 @@ import com.example.lisiyan.cloudlook.ui.one.OneMovieDetailActivity;
 import com.jakewharton.rxbinding2.view.RxView;
 
 import java.util.concurrent.TimeUnit;
-
-import io.reactivex.functions.Consumer;
 
 /**
  * Created by lisiyan on 2017/11/27.
@@ -49,31 +46,19 @@ public class DouBanTopAdapter extends BaseRecyclerViewAdapter<SubjectsBean> {
             binding.executePendingBindings();
             RxView.clicks(binding.llItemTop)
                     .throttleFirst(1000, TimeUnit.MILLISECONDS)
-                    .subscribe(new Consumer<Object>() {
-                        @Override
-                        public void accept(Object o) throws Exception {
-                            OneMovieDetailActivity.start(activity,bean,binding.ivTopPhoto);
-                        }
-                    });
+                    .subscribe(o -> OneMovieDetailActivity.start(activity,bean,binding.ivTopPhoto));
 
-            binding.llItemTop.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                    View view = View.inflate(v.getContext(),R.layout.title_douban_top,null);
-                    TextView titleTop = view.findViewById(R.id.title_top);
-                    titleTop.setText("Top" + (position + 1) + ": " + bean.getTitle());
-                    builder.setCustomTitle(view);
-                    builder.setPositiveButton("查看详情", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            OneMovieDetailActivity.start(activity, bean, binding.ivTopPhoto);
-                        }
-                    });
-                    builder.show();
+            binding.llItemTop.setOnLongClickListener(v -> {
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                View view = View.inflate(v.getContext(),R.layout.title_douban_top,null);
+                TextView titleTop = view.findViewById(R.id.title_top);
+                titleTop.setText("Top" + (position + 1) + ": " + bean.getTitle());
+                builder.setCustomTitle(view);
+                builder.setPositiveButton("查看详情", (dialog, which) ->
+                        OneMovieDetailActivity.start(activity, bean, binding.ivTopPhoto));
+                builder.show();
 
-                    return false;
-                }
+                return false;
             });
 
         }

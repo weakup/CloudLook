@@ -17,8 +17,6 @@ import com.nineoldandroids.view.ViewPropertyAnimator;
 
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.functions.Consumer;
-
 /**
  * Created by lisiyan on 2017/10/30.
  */
@@ -60,13 +58,7 @@ public class OneAdapter extends BaseRecyclerViewAdapter {
 
                 RxView.clicks(binding.llOneItem)
                         .throttleFirst(1000, TimeUnit.MILLISECONDS)
-                        .subscribe(new Consumer<Object>() {
-                            @Override
-                            public void accept(Object o) throws Exception {
-                                OneMovieDetailActivity.start(mActivity, subjectsBean, binding.ivOnePhoto);
-
-                            }
-                        });
+                        .subscribe(o -> OneMovieDetailActivity.start(mActivity, subjectsBean, binding.ivOnePhoto));
             }
         }
     }

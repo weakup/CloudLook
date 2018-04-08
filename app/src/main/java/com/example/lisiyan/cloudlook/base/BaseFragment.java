@@ -20,8 +20,6 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.internal.subscriptions.ArrayCompositeSubscription;
 
 /**
  * Created by lisiyan on 2017/10/25.
@@ -72,13 +70,9 @@ public abstract class BaseFragment<SV extends ViewDataBinding> extends Fragment 
         mRefresh = getView(R.id.ll_error_refresh);
         RxView.clicks(mRefresh)
                 .throttleFirst(1000, TimeUnit.MILLISECONDS)
-                .subscribe(new Consumer<Object>() {
-                    @Override
-                    public void accept(Object o) throws Exception {
-
-                        showLoading();
-                        onRefresh();
-                    }
+                .subscribe(o -> {
+                    showLoading();
+                    onRefresh();
                 });
 
         bindingView.getRoot().setVisibility(View.GONE);

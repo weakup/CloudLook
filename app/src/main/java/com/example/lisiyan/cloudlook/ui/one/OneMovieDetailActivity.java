@@ -130,12 +130,7 @@ public class OneMovieDetailActivity extends BaseHeaderActivity<HeaderSlideShapeB
                     movieDetailBean.getCasts().get(i).setType("演员");
                 }
 
-                OneMovieDetailActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        setAdapter(movieDetailBean);
-                    }
-                });
+                OneMovieDetailActivity.this.runOnUiThread(() -> setAdapter(movieDetailBean));
             }
         }).start();
     }

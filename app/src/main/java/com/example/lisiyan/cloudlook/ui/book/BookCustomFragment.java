@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -74,18 +73,12 @@ public class BookCustomFragment extends BaseFragment<FragmentBookCustomBinding> 
         super.onActivityCreated(savedInstanceState);
         showContentView();
         bindingView.srlBook.setColorSchemeColors(CommonUtils.getColor(getActivity(),R.color.colorTheme));
-        bindingView.srlBook.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                bindingView.srlBook.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mStart = 0;
-                        loadCustomData();
-                    }
-                },1000);
-            }
-        });
+        bindingView.srlBook.setOnRefreshListener(
+                () -> bindingView.srlBook.postDelayed(
+                () -> {
+            mStart = 0;
+            loadCustomData();
+        },1000));
 
         mLayoutManager = new GridLayoutManager(getActivity(), 3);
         bindingView.xrvBook.setLayoutManager(mLayoutManager);
@@ -181,12 +174,9 @@ public class BookCustomFragment extends BaseFragment<FragmentBookCustomBinding> 
 
                         mBookAdapter.updateLoadStatus(BookAdapter.LOAD_MORE);
 
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                mStart += mCount;
-                                loadCustomData();
-                            }
+                        new Handler().postDelayed(() -> {
+                            mStart += mCount;
+                            loadCustomData();
                         },1000);
                     }
                 }
@@ -207,12 +197,7 @@ public class BookCustomFragment extends BaseFragment<FragmentBookCustomBinding> 
         }
 
         bindingView.srlBook.setRefreshing(true);
-        bindingView.srlBook.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                loadCustomData();
-            }
-        }, 500);
+        bindingView.srlBook.postDelayed(() -> loadCustomData(), 500);
     }
 
     @Override

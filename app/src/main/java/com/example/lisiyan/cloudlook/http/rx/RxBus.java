@@ -1,8 +1,6 @@
 package com.example.lisiyan.cloudlook.http.rx;
 
 import io.reactivex.Observable;
-import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 
@@ -62,16 +60,8 @@ public class RxBus {
     public <T> Observable toObservable(final int code, final Class<T> eventType){
 
         return bus.ofType(RxBusBaseMessage.class)
-                .filter(new Predicate<RxBusBaseMessage>() {
-                    @Override
-                    public boolean test(RxBusBaseMessage o) throws Exception {
-                        return o.getCode() == code && eventType.isInstance(o.getObject());
-                    }
-                }).map(new Function<RxBusBaseMessage,Object>() {
-                    @Override
-                    public Object apply(RxBusBaseMessage rxBusBaseMessage) throws Exception {
-                        return rxBusBaseMessage.getObject();
-                    }
-                }).cast(eventType);
+                .filter(o ->
+                        o.getCode() == code && eventType.isInstance(o.getObject())).map(
+                                rxBusBaseMessage -> rxBusBaseMessage.getObject()).cast(eventType);
     }
 }

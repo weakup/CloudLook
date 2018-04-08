@@ -1,6 +1,5 @@
 package com.example.lisiyan.cloudlook.adapter;
 
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.lisiyan.cloudlook.R;
@@ -47,16 +46,13 @@ public class WelfareAdapter extends BaseRecyclerViewAdapter<GankIoDataBean.Resul
             binding.setBean(resultsBean);
         // 数据变更调用
             binding.executePendingBindings();
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            itemView.setOnClickListener(v -> {
 
-                    if (mClickListener != null){
+                if (mClickListener != null){
 
-                        mClickListener.onClick(resultsBean,posotion);
-                    }
-
+                    mClickListener.onClick(resultsBean,posotion);
                 }
+
             });
 
         }

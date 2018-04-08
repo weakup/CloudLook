@@ -138,12 +138,9 @@ public abstract class BaseHeaderActivity<HV extends ViewDataBinding,SV extends  
         // 点击加载失败布局
         RxView.clicks(refresh)
                 .throttleFirst(1000, TimeUnit.MILLISECONDS)
-                .subscribe(new Consumer<Object>() {
-                    @Override
-                    public void accept(Object o) throws Exception {
-                        showLoading();
-                        onRefresh();
-                    }
+                .subscribe(o -> {
+                    showLoading();
+                    onRefresh();
                 });
 
         bindingContentView.getRoot().setVisibility(View.GONE);
@@ -306,13 +303,7 @@ public abstract class BaseHeaderActivity<HV extends ViewDataBinding,SV extends  
     private void initScrollViewListener(){
 // 为了兼容23以下
         ((MyNestedScrollView) findViewById(R.id.mns_base))
-               .setOnScrollChangeListener(new MyNestedScrollView.ScrollInterface() {
-                   @Override
-                   public void onScrollChange(int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-
-                       scrollChangeHeader(scrollY);
-                   }
-               });
+               .setOnScrollChangeListener((scrollX, scrollY, oldScrollX, oldScrollY) -> scrollChangeHeader(scrollY));
 
     }
 

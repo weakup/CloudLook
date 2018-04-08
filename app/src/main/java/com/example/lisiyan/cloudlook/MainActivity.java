@@ -33,8 +33,6 @@ import com.example.lisiyan.cloudlook.view.MyFragmentPagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.functions.Consumer;
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,ViewPager.OnPageChangeListener {
 
     private FrameLayout llTitleMenu;
@@ -246,11 +244,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void initRxBus() {
         RxBus.getDefault().toObservable(RxCodeConstants.JUMP_TYPE_TO_ONE, RxBusBaseMessage.class)
-                .subscribe(new Consumer() {
-                    @Override
-                    public void accept(Object o) throws Exception {
-                        mMainBinding.include.vpContent.setCurrentItem(1);
-                    }
-                });
+                .subscribe(o -> mMainBinding.include.vpContent.setCurrentItem(1));
     }
 }

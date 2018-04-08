@@ -68,12 +68,7 @@ public class AndroidAdapter extends BaseRecyclerViewAdapter<GankIoDataBean.Resul
                 binding.ivAndroidPic.setVisibility(View.GONE);
             }
 
-            binding.llAll.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    WebViewActivity.loadUrl(v.getContext(), object.getUrl(), "加载中...");
-                }
-            });
+            binding.llAll.setOnClickListener(v -> WebViewActivity.loadUrl(v.getContext(), object.getUrl(), "加载中..."));
         }
     }
 

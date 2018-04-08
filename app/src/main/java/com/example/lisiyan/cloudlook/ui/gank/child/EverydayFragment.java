@@ -115,12 +115,7 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
             }
         });
 
-        mHeaderBinding.includeEveryday.ibMovieHot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RxBus.getDefault().post(RxCodeConstants.JUMP_TYPE_TO_ONE, new RxBusBaseMessage());
-            }
-        });
+        mHeaderBinding.includeEveryday.ibMovieHot.setOnClickListener(v -> RxBus.getDefault().post(RxCodeConstants.JUMP_TYPE_TO_ONE, new RxBusBaseMessage()));
 
     }
 

@@ -24,7 +24,6 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 /**
  * Created by lisiyan on 2017/11/27.
@@ -80,13 +79,9 @@ public class BaseActivity <SV extends ViewDataBinding>extends AppCompatActivity 
         // 点击加载失败布局
         RxView.clicks(refresh)
                 .throttleFirst(1000, TimeUnit.MILLISECONDS)
-                .subscribe(new Consumer<Object>() {
-                    @Override
-                    public void accept(Object o) throws Exception {
-
-                        showLoading();
-                        onRefresh();
-                    }
+                .subscribe(o -> {
+                    showLoading();
+                    onRefresh();
                 });
         bindingView.getRoot().setVisibility(View.GONE);
     }

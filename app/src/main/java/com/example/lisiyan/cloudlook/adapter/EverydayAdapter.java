@@ -1,7 +1,6 @@
 package com.example.lisiyan.cloudlook.adapter;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -30,8 +29,6 @@ import com.jakewharton.rxbinding2.view.RxView;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import io.reactivex.functions.Consumer;
 
 /**
  * Created by lisiyan on 2017/11/3.
@@ -134,13 +131,7 @@ public class EverydayAdapter extends BaseRecyclerViewAdapter<List<AndroidBean>> 
 
             final int finalIndex = index;
 
-            binding.llTitleMore.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    RxBus.getDefault().post(RxCodeConstants.JUMP_TYPE,finalIndex);
-                }
-            });
+            binding.llTitleMore.setOnClickListener(view -> RxBus.getDefault().post(RxCodeConstants.JUMP_TYPE,finalIndex));
 
         }
 
@@ -226,33 +217,19 @@ public class EverydayAdapter extends BaseRecyclerViewAdapter<List<AndroidBean>> 
 
         RxView.clicks(linearLayout)
                 .throttleFirst(1000, TimeUnit.MILLISECONDS)
-                .subscribe(new Consumer<Object>() {
-                    @Override
-                    public void accept(Object o) throws Exception {
+                .subscribe(o -> WebViewActivity.loadUrl(linearLayout.getContext(),bean.getUrl(),"加载中..."));
 
-                        WebViewActivity.loadUrl(linearLayout.getContext(),bean.getUrl(),"加载中...");
-                    }
-                });
-
-        linearLayout.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                View view = View.inflate(v.getContext(), R.layout.title_douban_top, null);
-                TextView titleTop = (TextView) view.findViewById(R.id.title_top);
-                titleTop.setTextSize(14);
-                String title = TextUtils.isEmpty(bean.getType()) ? bean.getDesc() : bean.getType() + "：  " + bean.getDesc();
-                titleTop.setText(title);
-                builder.setCustomTitle(view);
-                builder.setPositiveButton("查看详情", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        WebViewActivity.loadUrl(linearLayout.getContext(), bean.getUrl(), "加载中...");
-                    }
-                });
-                builder.show();
-                return false;
-            }
+        linearLayout.setOnLongClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+            View view = View.inflate(v.getContext(), R.layout.title_douban_top, null);
+            TextView titleTop = (TextView) view.findViewById(R.id.title_top);
+            titleTop.setTextSize(14);
+            String title = TextUtils.isEmpty(bean.getType()) ? bean.getDesc() : bean.getType() + "：  " + bean.getDesc();
+            titleTop.setText(title);
+            builder.setCustomTitle(view);
+            builder.setPositiveButton("查看详情", (dialog, which) -> WebViewActivity.loadUrl(linearLayout.getContext(), bean.getUrl(), "加载中..."));
+            builder.show();
+            return false;
         });
 
 

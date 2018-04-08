@@ -8,7 +8,6 @@ import com.example.lisiyan.cloudlook.R;
 import com.example.lisiyan.cloudlook.adapter.WelfareAdapter;
 import com.example.lisiyan.cloudlook.app.Constants;
 import com.example.lisiyan.cloudlook.base.BaseFragment;
-import com.example.lisiyan.cloudlook.base.baseadapter.OnItemClickListener;
 import com.example.lisiyan.cloudlook.bean.GankIoDataBean;
 import com.example.lisiyan.cloudlook.databinding.FragmentWelfareBinding;
 import com.example.lisiyan.cloudlook.http.cache.ACache;
@@ -106,11 +105,8 @@ public class WelfareFragment extends BaseFragment<FragmentWelfareBinding>{
         bindingView.xrvWelfare.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
 
-        mAdapter.setOnItemClickListener(new OnItemClickListener<GankIoDataBean.ResultBean>() {
-            @Override
-            public void onClick(GankIoDataBean.ResultBean resultBean, int position) {
+        mAdapter.setOnItemClickListener((resultBean, position) -> {
 
-            }
         });
 
         // 显示成功后就不是第一次了，不再刷新

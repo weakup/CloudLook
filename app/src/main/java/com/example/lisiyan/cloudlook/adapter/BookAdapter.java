@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.functions.Consumer;
-
 /**
  * Created by lisiyan on 2017/11/28.
  */
@@ -215,12 +213,7 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
             RxView.clicks(mBookBinding.llItemTop)
                     .throttleFirst(1000, TimeUnit.MILLISECONDS)
-                    .subscribe(new Consumer<Object>() {
-                        @Override
-                        public void accept(Object o) throws Exception {
-                            BookDetailActivity.start(context,book,mBookBinding.ivTopPhoto);
-                        }
-                    });
+                    .subscribe(o -> BookDetailActivity.start(context,book,mBookBinding.ivTopPhoto));
         }
     }
 
