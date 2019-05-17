@@ -139,7 +139,7 @@ public class EverydayModel {
             }
         };
 
-        HttpClient.Builder.getGankIOServer().getGankIoDay(year,month,day)
+        HttpClient.Builder.getGankIOServer().getGankIoToDay()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap(function)
@@ -271,15 +271,17 @@ public class EverydayModel {
         // 跳转链接
         androidBean.setUrl(arrayList.get(i).getUrl());
 
-        if (i < 3) {
-            androidBean.setImage_url(ConstantsImageUrl.HOME_SIX_URLS[getRandom(3)]);//三小图
-        } else if (androidSize == 4) {
-            androidBean.setImage_url(ConstantsImageUrl.HOME_ONE_URLS[getRandom(1)]);//一图
-        } else if (androidSize == 5) {
-            androidBean.setImage_url(ConstantsImageUrl.HOME_TWO_URLS[getRandom(2)]);//两图
-        } else if (androidSize >= 6) {
-            androidBean.setImage_url(ConstantsImageUrl.HOME_SIX_URLS[getRandom(3)]);//三小图
-        }
+//        if (i < 3) {
+//            androidBean.setImage_url(ConstantsImageUrl.getRandomImageUrl());//三小图
+//        } else if (androidSize == 4) {
+//            androidBean.setImage_url(ConstantsImageUrl.HOME_ONE_URLS[getRandom(1)]);//一图
+//        } else if (androidSize == 5) {
+//            androidBean.setImage_url(ConstantsImageUrl.HOME_TWO_URLS[getRandom(2)]);//两图
+//        } else if (androidSize >= 6) {
+//            androidBean.setImage_url(ConstantsImageUrl.getRandomImageUrl());//三小图
+//        }
+
+        androidBean.setImage_url(ConstantsImageUrl.getRandomImageUrl());
 
         return androidBean;
 
@@ -298,13 +300,15 @@ public class EverydayModel {
 //            DebugUtil.error("---androidSize:  " + androidSize);
             // 随机图的url
 
-            if (androidSize == 1) {
-                androidBean.setImage_url(ConstantsImageUrl.HOME_ONE_URLS[getRandom(1)]);//一图
-            } else if (androidSize == 2) {
-                androidBean.setImage_url(ConstantsImageUrl.HOME_TWO_URLS[getRandom(2)]);//两图
-            } else if (androidSize == 3) {
-                androidBean.setImage_url(ConstantsImageUrl.HOME_SIX_URLS[getRandom(3)]);//三图
-            }
+//            if (androidSize == 1) {
+//                androidBean.setImage_url(ConstantsImageUrl.HOME_ONE_URLS[getRandom(1)]);//一图
+//            } else if (androidSize == 2) {
+//                androidBean.setImage_url(ConstantsImageUrl.HOME_TWO_URLS[getRandom(2)]);//两图
+//            } else if (androidSize == 3) {
+//                androidBean.setImage_url(ConstantsImageUrl.getRandomImageUrl());//三图
+//            }
+
+            androidBean.setImage_url(ConstantsImageUrl.getRandomImageUrl());
 
             tempList.add(androidBean);
         }

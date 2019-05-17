@@ -1,6 +1,7 @@
 package com.example.http;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.FieldNamingStrategy;
@@ -9,6 +10,8 @@ import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.charset.Charset;
+import java.nio.charset.UnsupportedCharsetException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -22,9 +25,14 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import okhttp3.Interceptor;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
+import okhttp3.internal.http.HttpHeaders;
+import okio.Buffer;
+import okio.BufferedSource;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -48,8 +56,7 @@ public class HttpUtils {
     private final static String API_GANKIO = "https://gank.io/api/";
     private final static String API_TING = "https://tingapi.ting.baidu.com/v1/restserver/";
     private final static String API_DOUBAN = "https://api.douban.com/";
-
-    private final static String API_BACK = "https://raw.githubusercontent.com/weakup/LookRespository/master/everyfragment/";
+    private final static String API_BACK = "https://github.com/weakup/LookRespository/blob/master/everyfragment";
 
     /**
      * 分页数据，每页的数量
@@ -170,6 +177,7 @@ public class HttpUtils {
     }
 
     class HttpHeadInterceptor implements Interceptor {
+        private final Charset UTF8 = Charset.forName("UTF-8");
         @Override
         public Response intercept(Chain chain) throws IOException {
             Request request = chain.request();
@@ -181,6 +189,29 @@ public class HttpUtils {
             } else {
                 int maxStale = 60 * 60 * 24 * 28;
                 builder.addHeader("Cache-Control", "public, only-if-cached, max-stale=" + maxStale);
+            }
+
+            Response response = chain.proceed(request);
+            ResponseBody responseBody = response.body();
+            String rBody = null;
+
+            if(HttpHeaders.hasBody(response)) {
+                BufferedSource source = responseBody.source();
+                source.request(Long.MAX_VALUE); // Buffer the entire body.
+                Buffer buffer = source.buffer();
+
+                Charset charset = UTF8;
+                MediaType contentType = responseBody.contentType();
+                if (contentType != null) {
+                    try {
+                        charset = contentType.charset(UTF8);
+                    } catch (UnsupportedCharsetException e) {
+                        e.printStackTrace();
+                    }
+                }
+                rBody = buffer.clone().readString(charset);
+
+                Log.d("HttpBody----->",rBody);
             }
 
             return chain.proceed(builder.build());

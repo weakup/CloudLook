@@ -63,6 +63,8 @@ public interface HttpClient {
     @GET("day/{year}/{month}/{day}")
     Observable<GankIoDayBean> getGankIoDay(@Path("year") String year, @Path("month") String month, @Path("day") String day);
 
+    @GET("today")
+    Observable<GankIoDayBean> getGankIoToDay();
 
     @GET("{page}.html")
     Observable<GankIoDayBean> getBackGankIoDay(@Path("page")String page);
@@ -70,7 +72,7 @@ public interface HttpClient {
     /**
      * 豆瓣热映电影，每日更新
      */
-    @GET("v2/movie/in_theaters")
+    @GET("v2/movie/in_theaters?apikey=0df993c66c0c636e29ecbb5344252a4a")
     Observable<HotMovieBean> getHotMovie();
 
     /**
@@ -78,7 +80,7 @@ public interface HttpClient {
      *
      * @param id 电影bean里的id
      */
-    @GET("v2/movie/subject/{id}")
+    @GET("v2/movie/subject/{id}?apikey=0df993c66c0c636e29ecbb5344252a4a")
     Observable<MovieDetailBean> getMovieDetail(@Path("id") String id);
 
     /**
@@ -87,7 +89,7 @@ public interface HttpClient {
      * @param start 从多少开始，如从"0"开始
      * @param count 一次请求的数目，如"10"条，最多100
      */
-    @GET("v2/movie/top250")
+    @GET("v2/movie/top250?apikey=0df993c66c0c636e29ecbb5344252a4a")
     Observable<HotMovieBean> getMovieTop250(@Query("start") int start, @Query("count") int count);
 
     /**
@@ -97,7 +99,7 @@ public interface HttpClient {
      * @param count 一次请求的数目 最多100
      */
 
-    @GET("v2/book/search")
+    @GET("v2/book/search?apikey=0df993c66c0c636e29ecbb5344252a4a")
     Observable<BookBean> getBook(@Query("tag") String tag, @Query("start") int start, @Query("count") int count);
     @GET("v2/book/{id}")
     Observable<BookDetailBean> getBookDetail(@Path("id") String id);

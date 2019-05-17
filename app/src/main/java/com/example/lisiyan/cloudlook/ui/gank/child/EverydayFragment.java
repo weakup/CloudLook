@@ -195,32 +195,9 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
         if (!mIsVisible || !mIsPrepared) {
             return;
         }
-        String oneData = SPUtils.getString("everyday_data", "2016-11-26");
-        if (!oneData.equals(TimeUtil.getData())){// 是第二天
-            if (TimeUtil.isRightTime()){//大于12：30,请求
-
-                isOldDayRequest = false;
-                mEverydayModel.setData(getTodayTime().get(0),getTodayTime().get(1),getTodayTime().get(2));
-                showRotaLoading(true);
-                loadBannerPicture();
-                showContentData();
-            } else {// 小于12:30，取缓存没有请求前一天
-
-                List<String> lastTime = TimeUtil.getLastTime(getTodayTime().get(0),getTodayTime().get(1),getTodayTime().get(2));
-                mEverydayModel.setData(lastTime.get(0),lastTime.get(1),lastTime.get(2));
-                year = lastTime.get(0);
-                month = lastTime.get(1);
-                day = lastTime.get(2);
-
-                isOldDayRequest = true;// 是昨天
-                getACacheData();
-
-            }
-        }else {// 当天，取缓存
-
-            isOldDayRequest = false;
-            getACacheData();
-        }
+        showRotaLoading(true);
+        loadBannerPicture();
+        showContentData();
 
     }
 
@@ -245,7 +222,7 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
 
                 }else {
 
-                    requestBeforeData();
+//                    requestBeforeData();
                 }
 
             }
@@ -258,41 +235,41 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
                     return;
                 }
 //丑到爆的备份访问
-                mEverydayModel.showBackRecyclerViewData(new RequestImpl() {
-                    @Override
-                    public void loadSuccess(Object object) {
+//                mEverydayModel.showBackRecyclerViewData(new RequestImpl() {
+//                    @Override
+//                    public void loadSuccess(Object object) {
+//
+//                        if (mLists != null){
+//                            mLists.clear();
+//                        }
+//
+//                        mLists = (ArrayList<List<AndroidBean>>) object;
+//
+//                        if (mLists.size() > 0 && mLists.get(0).size() > 0){
+//
+//                            setAdapter(mLists);
+//
+//                        }else {
+//
+//                            requestBeforeData();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void loadFailed() {
+//
+//                        showError();
+//
+//                    }
+//
+//                    @Override
+//                    public void addSubscription(Disposable d) {
+//
+//                        EverydayFragment.this.addDisposable(d);
+//                    }
+//                });
 
-                        if (mLists != null){
-                            mLists.clear();
-                        }
-
-                        mLists = (ArrayList<List<AndroidBean>>) object;
-
-                        if (mLists.size() > 0 && mLists.get(0).size() > 0){
-
-                            setAdapter(mLists);
-
-                        }else {
-
-                            requestBeforeData();
-                        }
-                    }
-
-                    @Override
-                    public void loadFailed() {
-
-                        showError();
-
-                    }
-
-                    @Override
-                    public void addSubscription(Disposable d) {
-
-                        EverydayFragment.this.addDisposable(d);
-                    }
-                });
-
-//                showError();
+                showError();
 
             }
 

@@ -1,6 +1,7 @@
 package com.example.lisiyan.cloudlook.app;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by jingbin on 2017/1/18.
@@ -113,4 +114,11 @@ public class ConstantsImageUrl {
             , getSixUrl().get(16), getSixUrl().get(17), getSixUrl().get(18), getSixUrl().get(19)
             , getSixUrl().get(20), getSixUrl().get(21), getSixUrl().get(22)
     };
+
+    public static String getRandomImageUrl(){
+        Random ra =new Random();
+        int id = ra.nextInt(100)+1;
+        final String randomImageUrl = "https://picsum.photos/id/"+id+"/200/300";
+        return randomImageUrl;
+    }
 }
