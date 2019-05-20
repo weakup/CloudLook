@@ -211,6 +211,7 @@ public class HttpUtils {
                 }
                 rBody = buffer.clone().readString(charset);
 
+                Log.d("RequestUrl --->",request.url().toString());
                 Log.d("HttpBody----->",rBody);
             }
 
