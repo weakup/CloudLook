@@ -101,7 +101,7 @@ public interface HttpClient {
 
     @GET("v2/book/search?apikey=0df993c66c0c636e29ecbb5344252a4a")
     Observable<BookBean> getBook(@Query("tag") String tag, @Query("start") int start, @Query("count") int count);
-    @GET("v2/book/{id}")
+    @GET("v2/book/{id}?apikey=0df993c66c0c636e29ecbb5344252a4a")
     Observable<BookDetailBean> getBookDetail(@Path("id") String id);
 
 
