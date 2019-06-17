@@ -59,7 +59,7 @@ public class GankFragment extends BaseFragment<FragmentGankBinding>{
     private void initFragmentList(){
 
         mTitleList.add("每日推荐");
-        mTitleList.add("每日十图");
+        mTitleList.add("每日好图");
         mTitleList.add("干货订制");
         mFragments.add(new EverydayFragment());
         mFragments.add(new WelfareFragment());

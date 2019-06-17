@@ -26,6 +26,9 @@ import com.example.lisiyan.cloudlook.http.rx.RxBusBaseMessage;
 import com.example.lisiyan.cloudlook.http.rx.RxCodeConstants;
 import com.example.lisiyan.cloudlook.ui.book.BookFragment;
 import com.example.lisiyan.cloudlook.ui.gank.GankFragment;
+import com.example.lisiyan.cloudlook.ui.menu.NavDownloadActivity;
+import com.example.lisiyan.cloudlook.ui.menu.NavHomePageActivity;
+import com.example.lisiyan.cloudlook.ui.menu.NavProblemActivity;
 import com.example.lisiyan.cloudlook.ui.one.OneFragment;
 import com.example.lisiyan.cloudlook.utils.ImgLoadUtil;
 import com.example.lisiyan.cloudlook.view.MyFragmentPagerAdapter;
@@ -77,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         llTitleOne = mMainBinding.include.ivTitleOne;
         llTitleDou = mMainBinding.include.ivTitleDou;
 
+
     }
 
     private void initListener(){
@@ -95,7 +99,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         View headerView = navView.getHeaderView(0);
         mNavHeaderBinding = DataBindingUtil.bind(headerView);
         ImgLoadUtil.getInstance().displayCirlce(mNavHeaderBinding.ivAvatar,null);
+        mNavHeaderBinding.llNavHomepage.setOnClickListener(this);
+        mNavHeaderBinding.llNavDeedback.setOnClickListener(this);
+        mNavHeaderBinding.llNavScanDownload.setOnClickListener(this);
     }
+
+
 
 
     private void initContentFragment(){
@@ -156,6 +165,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
 
+            case R.id.ll_nav_homepage:
+                NavHomePageActivity.startHome(MainActivity.this);
+                break;
+            case R.id.ll_nav_deedback:
+                NavProblemActivity.start(MainActivity.this);
+                break;
+
+            case R.id.ll_nav_scan_download://扫码下载
+                NavDownloadActivity.start(MainActivity.this);
+                break;
             default:
                 break;
 
@@ -172,8 +191,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.action_search:
-                return true;
                 default:
                     return super.onOptionsItemSelected(item);
         }

@@ -161,7 +161,7 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
                             mBannerImages.add(result.get(i).getRandpic());
                         }
 
-                        mHeaderBinding.banner.setImages(mBannerImages).setImageLoader(new GlideImageLoader()).start();
+//                        mHeaderBinding.banner.setImages(mBannerImages).setImageLoader(new GlideImageLoader()).start();
                         maCache.remove(Constants.BANNER_PIC);
                         maCache.put(Constants.BANNER_PIC, mBannerImages, 30000);
                     }
@@ -186,11 +186,11 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
     @Override
     protected void loadData() {
 
-        // 显示时轮播图滚动
-        if (mHeaderBinding != null && mHeaderBinding.banner != null) {
-            mHeaderBinding.banner.startAutoPlay();
-            mHeaderBinding.banner.setDelayTime(4000);
-        }
+//        // 显示时轮播图滚动
+//        if (mHeaderBinding != null && mHeaderBinding.banner != null) {
+//            mHeaderBinding.banner.startAutoPlay();
+//            mHeaderBinding.banner.setDelayTime(4000);
+//        }
 
         if (!mIsVisible || !mIsPrepared) {
             return;
@@ -306,11 +306,11 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
             return;
         }
 
-        if (mBannerImages != null && mBannerImages.size() > 0) {
-            mHeaderBinding.banner.setImages(mBannerImages).setImageLoader(new GlideImageLoader()).start();
-        } else {
-            loadBannerPicture();
-        }
+//        if (mBannerImages != null && mBannerImages.size() > 0) {
+//            mHeaderBinding.banner.setImages(mBannerImages).setImageLoader(new GlideImageLoader()).start();
+//        } else {
+//            loadBannerPicture();
+//        }
 
         mLists = (ArrayList<List<AndroidBean>>) maCache.getAsObject(Constants.EVERYDAY_CONTENT);
         if (mLists != null && mLists.size() >0){
@@ -379,9 +379,9 @@ public class EverydayFragment extends BaseFragment<FragmentEverydayBinding> {
     @Override
     protected void onInvisible() {
         // 不可见时轮播图停止滚动
-        if (mHeaderBinding != null && mHeaderBinding.banner != null) {
-            mHeaderBinding.banner.stopAutoPlay();
-        }
+//        if (mHeaderBinding != null && mHeaderBinding.banner != null) {
+//            mHeaderBinding.banner.stopAutoPlay();
+//        }
     }
 
     @Override

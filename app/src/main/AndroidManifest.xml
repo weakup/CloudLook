@@ -45,6 +45,11 @@
             android:name=".ui.book.BookDetailActivity"
             android:screenOrientation="portrait" />
 
+        <activity android:name=".ui.menu.NavHomePageActivity"/>
+
+        <activity android:name=".ui.menu.NavProblemActivity"/>
+
+        <activity android:name=".ui.menu.NavDownloadActivity"/>
 
     </application>
 
